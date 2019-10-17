@@ -21,14 +21,15 @@ export default class {
       emptyValueDisplay: 'Empty',
       renderer: new PopupRenderer(),
       validate: (/* value, instance */) => true,
+      errorDisplay: (error) => error,
       server: {
         url: null,
         requestParams: {},
-        onSubmit: (value, onSuccess, onError) => {
+        submit: (value, onSuccess, onError) => {
           const { server } = this.config;
           fetch(this.resolveFunction(server.url), merge({ value },
             this.resolveFunction(server.requestParams))).then((res) => res.json())
-            .then((data) => onSuccess(data))
+            .then(() => onSuccess(value))
             .catch((error) => onError(error));
         },
       },
@@ -66,7 +67,23 @@ export default class {
   }
 
   submitForm() {
-    console.log(this.type.getInputValue(this.popup.markup));
+    const value = this.type.getInputValue(this.renderable.getMarkup());
+    this.renderable.showError('Une jolie erreur');
+    setTimeout(() => {
+      this.renderable.clearError();
+    }, 2000);
+    if (this.config.validate(value, this)) {
+      this.config.server.submit(value, (newValue) => {
+        this.value = newValue;
+        this.refreshReadModeValue();
+        this.closeEditMode();
+      }, (error) => {
+
+      });
+    } else {
+      console.log('ERROR');
+      // do sth
+    }
   }
 
   resolveFunction(item) {

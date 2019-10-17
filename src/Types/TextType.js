@@ -2,6 +2,8 @@
 
 import merge from 'merge';
 
+const ARIA_TEXT_INPUT = 'aria-text-input';
+
 export default class {
   constructor(instance) {
     const defaultConfig = {
@@ -14,12 +16,7 @@ export default class {
   }
 
   getInputValue(rootTemplateNode) {
-    console.log(rootTemplateNode);
-    return rootTemplateNode.firstChild.value;
-  }
-
-  valueToInput(value) {
-    return value;
+    return rootTemplateNode.querySelector(`[${ARIA_TEXT_INPUT}]`).value;
   }
 
   valueToHTML(value) {
@@ -36,6 +33,6 @@ export default class {
   }
 
   getMarkup() {
-    return `<div><input type="text" class="${this.config.class}" /></div>`;
+    return `<div><input type="text" ${ARIA_TEXT_INPUT} class="${this.config.class}" /></div>`;
   }
 }
