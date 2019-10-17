@@ -1,4 +1,5 @@
 import TextType from './Types/TextType';
+import SelectType from './Types/SelectType';
 
 class Loader {
   constructor() {
@@ -17,5 +18,6 @@ class Loader {
 
 const loader = new Loader();
 loader.registerType('text', TextType);
+loader.registerType('select', SelectType);
 
 export default loader;

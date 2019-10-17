@@ -7,7 +7,6 @@ const ARIA_TEXT_INPUT = 'aria-text-input';
 export default class {
   constructor(instance) {
     const defaultConfig = {
-      type: 'text',
       class: '',
     };
 
