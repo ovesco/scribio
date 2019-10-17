@@ -19,7 +19,7 @@
     "start": "webpack-dev-server"
   },
   "dependencies": {
-    "cheerio": "^1.0.0-rc.3",
-    "merge": "^1.2.1"
+    "merge": "^1.2.1",
+    "popper.js": "^1.16.0"
   }
 }

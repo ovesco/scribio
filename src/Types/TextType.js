@@ -1,3 +1,5 @@
+/* eslint-disable class-methods-use-this */
+
 import merge from 'merge';
 
 export default class {
@@ -11,27 +13,29 @@ export default class {
     this.value = instance.config.defaultValue;
   }
 
-  static inputToValue(rootTemplateNode) {
+  getInputValue(rootTemplateNode) {
+    console.log(rootTemplateNode);
     return rootTemplateNode.firstChild.value;
   }
 
-  static valueToInput(value) {
+  valueToInput(value) {
     return value;
   }
 
-  static valueToHTML(value) {
+  valueToHTML(value) {
     return value;
   }
 
-  static onDisplay(rootTemplateNode, value) {
+  onDisplay(rootTemplateNode, value) {
     // eslint-disable-next-line
     rootTemplateNode.firstChild.value = value;
   }
 
   onDestroy() {
+    return null;
   }
 
-  getTemplate() {
+  getMarkup() {
     return `<div><input type="text" class="${this.config.class}" /></div>`;
   }
 }
