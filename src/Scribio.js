@@ -1,4 +1,4 @@
-import merge from 'merge';
+import merge from 'deepmerge';
 
 import Instance from './Instance';
 import defaultConfig from './DefaultConfig';
@@ -10,24 +10,35 @@ class Scribio {
     this.defaultConfig = merge(defaultConfig, config);
   }
 
-  getType(type, config = {}) {
-    if (!this.types.has(type)) throw new Error(`Unknown type ${type}`);
-    const Type = this.types.get(type);
+  registerRenderer(name, renderer) {
+    this.renderers.set(name, renderer);
+  }
+
+  registerType(name, type) {
+    this.types.set(name, type);
+  }
+
+  getType({ name, config }) {
+    if (!this.types.has(name)) throw new Error(`Unknown type ${name}`);
+    const Type = this.types.get(name);
     return (instance) => new Type(instance, config);
   }
 
-  getRenderer(renderer, config = {}) {
-    if (!this.renderers.has(renderer)) throw new Error(`Unknown renderer ${renderer}`);
-    return (instance) => this.renderers.get(renderer)(instance, config);
+  getRenderer({ name, config }) {
+    if (!this.renderers.has(name)) throw new Error(`Unknown renderer ${name}`);
+    return (instance) => this.renderers.get(name)(instance, config);
   }
 
   span(container, givenConfig = {}) {
     const config = merge(this.defaultConfig, givenConfig);
+    console.log(config);
     return new Instance(
       container,
-      this.getType(config.type, config.type.config),
-      this.getRenderer(config.renderer, config.renderer.config),
+      this.getType(config.type),
+      this.getRenderer(config.renderer),
       config,
     );
   }
 }
+
+export default new Scribio();

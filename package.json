@@ -19,6 +19,7 @@
     "start": "webpack-dev-server"
   },
   "dependencies": {
+    "deepmerge": "^4.2.0",
     "flat": "^4.1.0",
     "merge": "^1.2.1",
     "popper.js": "^1.16.0"

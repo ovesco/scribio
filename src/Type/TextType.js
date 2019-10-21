@@ -1,14 +1,15 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable no-param-reassign */
 
-import merge from 'merge';
+import merge from 'deepmerge';
 
-import { resolveConfig } from "../Util";
+import { resolveConfig } from '../Util';
 
 const ARIA_TEXT_INPUT = 'aria-scribio-text-input';
 
-export const defaultConfig = {
+const defaultConfig = {
   class: '',
+  type: 'text',
 };
 
 export default class {
@@ -34,6 +35,6 @@ export default class {
   }
 
   getTemplate() {
-    return `<div><input type="text" ${ARIA_TEXT_INPUT} class="${this.config('class')}"></div>`;
+    return `<div><input type="${this.config('type')}" ${ARIA_TEXT_INPUT} class="${this.config('class')}"></div>`;
   }
 }

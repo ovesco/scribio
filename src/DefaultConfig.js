@@ -1,5 +1,3 @@
-import merge from 'merge';
-
 const ARIA_EDIT_CONTAINER = 'aria-scribio-edit-container';
 const ARIA_ACTION_CONTAINER = 'aria-scribio-action-container';
 const ARIA_READ_ELEMENT = 'aria-scribio-read-element';
@@ -28,18 +26,28 @@ export default {
     url: null,
     requestParams: {},
   },
-  voidValue: null,
+  emptyValues: [null, '', undefined],
   currentValue: null,
   voidDisplay: 'Empty',
   handler: {
-    onSubmit: (value, onSuccess, onError) => {
-      const { server } = this.config;
-      fetch(this.resolve(server.url), merge(this.resolve(server.requestParams, { value })))
+    onSubmit(value, onSuccess, onError) {
+      /*
+      fetch(this.config('server.url'), merge(this.config('server.requestParams'), { value }))
         .then((res) => res.json())
         .then(() => onSuccess(value))
         .catch((error) => onError(error));
+       */
+      setTimeout(() => {
+        if (Math.random() > 0.00001) onSuccess(value);
+        else onError(new Error('Server error labite'));
+      });
     },
-    validate: (value) => value,
+    errorDisplay(error) {
+      return error.message;
+    },
+    validate() {
+      return true;
+    },
   },
   template: {
     edit: `
@@ -54,7 +62,7 @@ export default {
 </div>`,
     read: `
 <div class="scribio-read-container">
-    <div ${ARIA_READ_ELEMENT}></div>
+    <span ${ARIA_READ_ELEMENT}></span>
 </div>`,
   },
 };

@@ -1,4 +1,4 @@
-import merge from 'merge';
+import merge from 'deepmerge';
 import Popper from 'popper.js';
 
 import { resolveConfig, parseTemplate, emptyContent } from '../Util';
@@ -8,6 +8,7 @@ const ARIA_POPUP_CONTAINER = 'aria-scribio-popup-container';
 const ARIA_POPUP_ERROR = 'aria-popup-error';
 
 const defaultConfig = {
+  popperConfig: {},
   popupTemplate: `
 <div class="scribio-popup">
     <div class="scribio-popup-title" ${ARIA_POPUP_TITLE}></div>
@@ -27,17 +28,18 @@ class Popup {
     this.listener = (e) => {
       if (this.popper === null || this.markup === null) return;
       if (this.markup.contains(e.target)) return;
-      if (instance.readModeContainer.contains(e.target)) return;
+      if (instance.ariaElement.contains(e.target)) return;
       instance.close();
     };
 
     // Show popup
     document.addEventListener('click', this.listener, true);
     document.body.append(this.markup);
-    this.popper = new Popper(this.instance.container, this.markup);
+    this.popper = new Popper(this.instance.ariaElement, this.markup, this.config('popperConfig'));
   }
 
   error(error) {
+    console.log(error);
     const container = this.markup.querySelector(`[${ARIA_POPUP_ERROR}]`);
     emptyContent(container);
     container.innerHTML = error;
@@ -50,8 +52,8 @@ class Popup {
   }
 
   loading(status) {
-    if (this.isLoading === status) return;
     console.log(`popup loading state: ${status}`);
+    if (this.isLoading === status) return;
     this.isLoading = status;
   }
 

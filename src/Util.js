@@ -1,11 +1,11 @@
 import flat from 'flat';
 
 export const resolveConfig = (config, item) => {
-  const flatten = flat.flatten(config);
+  const flatten = flat.flatten(config, { safe: true });
   const mapConfig = new Map();
   Object.keys(flatten).forEach((key) => {
     const val = flatten[key];
-    mapConfig.set(key, (typeof val === 'function') ? val.bind(item) : () => val);
+    mapConfig.set(key, (typeof val === 'function') ? () => val.bind(item) : () => val);
   });
   return (key) => {
     if (!mapConfig.has(key)) throw new Error(`Unknown config key ${key}`);
@@ -15,12 +15,11 @@ export const resolveConfig = (config, item) => {
 
 export const parseTemplate = (template) => {
   if (template instanceof Element || template instanceof Node) return template;
-  const templateNode = document.createElement('template');
-  templateNode.innerHTML = template.trim();
-  return templateNode.content.firstChild;
+  return (new DOMParser()).parseFromString(template, 'text/html').body.firstElementChild;
 };
 
-export const parseTemplateAsync = (template) => Promise.resolve(parseTemplate(template));
+export const parseTemplateAsync = (template) => Promise.resolve(template)
+  .then(((tmpl) => parseTemplate(tmpl)));
 
 export const emptyContent = (node) => {
   while (node.firstChild) node.removeChild(node.firstChild);
