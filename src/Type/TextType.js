@@ -10,11 +10,13 @@ const ARIA_TEXT_INPUT = 'aria-scribio-text-input';
 const defaultConfig = {
   class: '',
   type: 'text',
+  attributes: '',
 };
 
 export default class {
   constructor(instance, givenConfig = {}) {
     this.config = resolveConfig(merge(defaultConfig, givenConfig));
+    console.log(this.config('class'));
     this.instance = instance;
   }
 
@@ -35,6 +37,6 @@ export default class {
   }
 
   getTemplate() {
-    return `<div><input type="${this.config('type')}" ${ARIA_TEXT_INPUT} class="${this.config('class')}"></div>`;
+    return `<div><input ${this.config('attributes')} type="${this.config('type')}" ${ARIA_TEXT_INPUT} class="${this.config('class')}"></div>`;
   }
 }

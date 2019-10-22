@@ -42,15 +42,17 @@ export default class {
         renderSession.show(markup);
         this.type.onDisplay(typeMarkup, this.value);
         renderSession.loading(false);
-        this.renderSession = { renderer: renderSession, markup };
+        this.renderSession = { renderer: renderSession, markup, typeMarkup };
       });
     });
   }
 
   submit() {
+    if (this.renderSession === null) return;
     const { renderer, markup } = this.renderSession;
     const value = this.type.getInputValue(markup.querySelector(`[${ARIA_EDIT_CONTAINER}]`));
-    if (this.config('handler.validate')(value) !== true) {
+    if (value === this.value) this.close();
+    else if (this.config('handler.validate')(value) !== true) {
       renderer.error('Invalid value provided');
     } else {
       renderer.loading(true);
@@ -75,7 +77,7 @@ export default class {
   refreshContent() {
     const { value, ariaElement } = this;
     let markup = this.config('voidDisplay');
-    if (!this.config('emptyValues').includes(value)) {
+    if (this.config('emptyValue') !== value) {
       markup = this.type.getReadableValue(value);
     }
     ariaElement.innerHTML = markup;

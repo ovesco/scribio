@@ -1,4 +1,5 @@
 import flat from 'flat';
+import merge from 'deepmerge';
 
 export const resolveConfig = (config, item) => {
   const flatten = flat.flatten(config, { safe: true });
@@ -12,6 +13,11 @@ export const resolveConfig = (config, item) => {
     return mapConfig.get(key)();
   };
 };
+
+export const themeResolver = (themes, ld, name) => themes.flatMap(ld)
+  .filter((tu) => tu !== undefined)
+  .filter((ty) => ty.name === name)
+  .reduce((ta, tb) => merge(ta.config, tb.config), {});
 
 export const parseTemplate = (template) => {
   if (template instanceof Element || template instanceof Node) return template;

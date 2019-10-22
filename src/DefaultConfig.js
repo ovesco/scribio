@@ -26,7 +26,7 @@ export default {
     url: null,
     requestParams: {},
   },
-  emptyValues: [null, '', undefined],
+  emptyValue: null,
   currentValue: null,
   voidDisplay: 'Empty',
   handler: {

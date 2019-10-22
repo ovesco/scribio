@@ -26,7 +26,8 @@ export default class {
   getInputValue(rootNode) {
     const select = rootNode.querySelector(`[${ARIA_SELECT}]`);
     if (!this.config('multiple')) return select.value;
-    return [...select.options].filter((o) => o.selected).map((o) => o.value);
+    const values = [...select.options].filter((o) => o.selected).map((o) => o.value);
+    return values.length > 0 ? values : this.instance.config('emptyValue');
   }
 
   getReadableValue(value) {
@@ -35,9 +36,9 @@ export default class {
   }
 
   onDisplay(select, value) {
+    if (this.instance.config('emptyValue') === value) return;
     const values = (!this.config('multiple')) ? [value] : value;
     values.forEach((v) => {
-      console.log(v, [...select.options].find((it) => `${it.value}` === `${v}`));
       [...select.options].find((it) => `${it.value}` === `${v}`).selected = true;
     });
   }
@@ -52,7 +53,7 @@ export default class {
         this.source = data;
         const select = document.createElement('select');
         const cls = this.config('class');
-        if (!['', null, undefined].includes(cls)) select.classList.add(cls);
+        if (!['', null, undefined].includes(cls)) cls.split(' ').forEach((c) => select.classList.add(c));
         select.setAttribute(ARIA_SELECT, '');
         if (this.config('multiple')) select.setAttribute('multiple', '1');
         data.forEach(({ value, text }) => {

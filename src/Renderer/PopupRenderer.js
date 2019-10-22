@@ -7,6 +7,12 @@ const ARIA_POPUP_TITLE = 'aria-scribio-popup-title';
 const ARIA_POPUP_CONTAINER = 'aria-scribio-popup-container';
 const ARIA_POPUP_ERROR = 'aria-popup-error';
 
+export {
+  ARIA_POPUP_TITLE,
+  ARIA_POPUP_CONTAINER,
+  ARIA_POPUP_ERROR,
+};
+
 const defaultConfig = {
   popperConfig: {},
   popupTemplate: `
