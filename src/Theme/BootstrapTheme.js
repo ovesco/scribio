@@ -1,8 +1,12 @@
+import { parseTemplate } from '../Util';
+
 import {
   ARIA_POPUP_CONTAINER,
   ARIA_POPUP_ERROR,
   ARIA_POPUP_TITLE,
   ARIA_POPUP_ARROW,
+  ARIA_POPUP_LOADING,
+
 } from '../Renderer/PopupRenderer';
 import {
   ARIA_EDIT_CONTAINER,
@@ -65,19 +69,29 @@ export default (size = 'md') => ({
         });
         forward();
       },
+      onLoading(status) {
+        const { markup } = this.renderSession;
+        const btn = markup.querySelector(`[${ARIA_SUBMIT_BTN}]`);
+        if (status) {
+          btn.insertAdjacentElement('afterbegin', parseTemplate(`<span class="spinner-border mr-1 spinner-border-${size}" role="status" aria-hidden="true"></span>`));
+        } else {
+          btn.removeChild(btn.firstChild);
+        }
+      },
     },
     template: {
       edit: `
 <div>
     <div class="scribio-edit-container d-flex">
         <div ${ARIA_EDIT_CONTAINER} class="mr-2"></div>
-        <div ${ARIA_ACTION_CONTAINER}>
-            <div class="btn-group">
-                <button type="button" class="btn btn-primary btn-${size}" ${ARIA_SUBMIT_BTN}>Ok</button>
-                <button type="button" class="btn btn-light btn-${size}" ${ARIA_CANCEL_BTN}>Cancel</button>
-            </div>
-        </div>
+        <div ${ARIA_ACTION_CONTAINER}></div>
+        <div ${ARIA_POPUP_LOADING}></div>
     </div>
+</div>`,
+      buttons: `
+<div class="btn-group">
+    <button type="button" class="btn btn-primary btn-${size}" ${ARIA_SUBMIT_BTN}>Ok</button>
+    <button type="button" class="btn btn-light btn-${size}" ${ARIA_CANCEL_BTN}>Cancel</button>
 </div>`,
     },
   },

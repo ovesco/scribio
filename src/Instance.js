@@ -3,7 +3,7 @@ import {
   ARIA_READ_ELEMENT,
   ARIA_EDIT_CONTAINER,
   ARIA_SUBMIT_BTN,
-  ARIA_CANCEL_BTN,
+  ARIA_CANCEL_BTN, ARIA_ACTION_CONTAINER,
 } from './DefaultConfig';
 
 export default class {
@@ -32,30 +32,39 @@ export default class {
 
   open() {
     if (this.renderSession !== null) return;
+    this.type.onChange(() => null);
     const renderSession = this.renderer(this);
     renderSession.loading(true);
     parseTemplateAsync(this.config('template.edit')).then((markup) => {
-      markup.querySelector(`[${ARIA_SUBMIT_BTN}]`).addEventListener('click', () => this.submit());
-      markup.querySelector(`[${ARIA_CANCEL_BTN}]`).addEventListener('click', () => this.close());
-      parseTemplateAsync(this.type.getTemplate()).then((typeMarkup) => {
-        markup.querySelector(`[${ARIA_EDIT_CONTAINER}]`).appendChild(typeMarkup);
-        renderSession.show(markup);
-        this.type.onDisplay(typeMarkup, this.value);
-        renderSession.loading(false);
-        this.renderSession = { renderer: renderSession, markup, typeMarkup };
+      parseTemplateAsync(this.config('template.buttons')).then((buttonsMarkup) => {
+        parseTemplateAsync(this.type.getTemplate()).then((typeMarkup) => {
+          if (this.config('handler.mode') === 'button') {
+            buttonsMarkup.querySelector(`[${ARIA_SUBMIT_BTN}]`).addEventListener('click', () => this.submit());
+            buttonsMarkup.querySelector(`[${ARIA_CANCEL_BTN}]`).addEventListener('click', () => this.close());
+            markup.querySelector(`[${ARIA_ACTION_CONTAINER}]`).appendChild(buttonsMarkup);
+          } else {
+            this.type.onChange(() => { this.submit(); });
+          }
+          markup.querySelector(`[${ARIA_EDIT_CONTAINER}]`).appendChild(typeMarkup);
+          renderSession.show(markup);
+          this.type.onDisplay(typeMarkup, this.value);
+          renderSession.loading(false);
+          this.renderSession = { renderer: renderSession, markup, typeMarkup };
+        });
       });
     });
   }
 
   submit() {
     if (this.renderSession === null) return;
-    const { renderer, markup } = this.renderSession;
+    const { markup } = this.renderSession;
+    this.loading(true);
     const value = this.type.getInputValue(markup.querySelector(`[${ARIA_EDIT_CONTAINER}]`));
     if (value === this.value) this.close();
     else if (this.config('handler.validate')(value) !== true) {
       this.submitError(new Error('Invalid value provided'));
+      this.loading(false);
     } else {
-      renderer.loading(true);
       const handler = this.config('handler.onSubmit');
       handler(value, (newValue) => {
         this.value = newValue;
@@ -63,8 +72,19 @@ export default class {
         this.close();
       }, (error) => {
         this.submitError(error);
+        this.loading(false);
       });
     }
+  }
+
+  loading(status) {
+    if (this.renderSession === null) return;
+    this.config('handler.onLoading')(status);
+    const { renderer, markup, typeMarkup } = this.renderSession;
+    renderer.loading(status);
+    markup.querySelector(`[${ARIA_CANCEL_BTN}]`).disabled = status;
+    markup.querySelector(`[${ARIA_SUBMIT_BTN}]`).disabled = status;
+    this.type.disable(typeMarkup, status);
   }
 
   submitError(error) {

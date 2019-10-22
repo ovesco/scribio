@@ -30,6 +30,7 @@ export default {
   currentValue: null,
   voidDisplay: 'Empty',
   handler: {
+    mode: 'button', // onchange
     onSubmit(value, onSuccess, onError) {
       /*
       fetch(this.config('server.url'), merge(this.config('server.requestParams'), { value }))
@@ -40,11 +41,12 @@ export default {
       setTimeout(() => {
         if (Math.random() > 0.00001) onSuccess(value);
         else onError(new Error('Server error labite'));
-      });
+      }, 3000);
     },
     onError(error, forward) {
       forward();
     },
+    onLoading: () => null,
     errorDisplay(error) {
       return error.message;
     },
@@ -56,12 +58,12 @@ export default {
     edit: `
 <div class="scribio-edit-container">
     <div ${ARIA_EDIT_CONTAINER}></div>
-    <div ${ARIA_ACTION_CONTAINER}>
-        <div class="scribio-buttons-container">
-          <button ${ARIA_SUBMIT_BTN}>Ok</button>
-          <button ${ARIA_CANCEL_BTN}>Cancel</button>
-      </div>
-    </div>
+    <div ${ARIA_ACTION_CONTAINER}></div>
+</div>`,
+    buttons: `
+<div class="scribio-buttons-container">
+    <button ${ARIA_SUBMIT_BTN}>Ok</button>
+    <button ${ARIA_CANCEL_BTN}>Cancel</button>
 </div>`,
     read: `
 <div class="scribio-read-container">

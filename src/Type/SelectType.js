@@ -1,5 +1,4 @@
 /* eslint-disable class-methods-use-this */
-/* eslint-disable no-param-reassign */
 
 import merge from 'deepmerge';
 
@@ -30,6 +29,10 @@ export default class {
   getReadableValue(value) {
     if (!this.config('multiple')) return this.source.find((it) => `${it.value}` === `${value}`).text;
     return value.map((v) => this.source.find((it) => `${it.value}` === `${v}`).text).join(', ');
+  }
+
+  disable(rootNode, status) {
+    rootNode.disabled = status;
   }
 
   onDisplay(select, value) {

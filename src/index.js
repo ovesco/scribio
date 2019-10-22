@@ -20,7 +20,7 @@ for (let i = 0; i < 5; i += 1) dataSource.push({ value: i, text: `option-${i}` }
 Scribio.span(document.querySelector('#scribio'), {
   type: {
     config: {
-      type: 'textarea',
+      type: 'text',
       attributes: 'min="0" max="10" step="2"',
     },
   },

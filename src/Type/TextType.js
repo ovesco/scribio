@@ -31,6 +31,14 @@ export default class {
     rootNode.querySelector(`[${ARIA_TEXT_INPUT}]`).value = value;
   }
 
+  disable(rootNode, status) {
+    rootNode.querySelector(`[${ARIA_TEXT_INPUT}]`).disabled = status;
+  }
+
+  onChange(rootNode, callback) {
+
+  }
+
   onDestroy() {
     return null;
   }

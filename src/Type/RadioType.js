@@ -37,6 +37,10 @@ export default class {
     radios.find((it) => `${it.value}` === `${value}`).checked = true;
   }
 
+  disable(rootNode, status) {
+    [...rootNode.querySelectorAll(`[name="${RADIO_NAME}"]`)].forEach((radio) => { radio.disabled = status; });
+  }
+
   onDestroy() {
     return null;
   }

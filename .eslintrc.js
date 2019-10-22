@@ -6,5 +6,6 @@ module.exports = {
   rules: {
     "linebreak-style": "off",
     "no-console": "off",
+    "no-param-reassign": "off",
   }
 };

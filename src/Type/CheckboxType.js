@@ -1,3 +1,6 @@
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-param-reassign */
+
 import merge from 'deepmerge';
 
 import { resolveConfig } from '../Util';
@@ -34,6 +37,10 @@ export default class {
     values.forEach((v) => {
       checkboxs.find((it) => `${it.value}` === `${v}`).checked = true;
     });
+  }
+
+  disable(rootNode, status) {
+    [...rootNode.querySelectorAll(`[name="${CHECKBOX_NAME}"]`)].forEach((cb) => { cb.disabled = status; });
   }
 
   onDestroy() {

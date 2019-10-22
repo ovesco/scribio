@@ -7,16 +7,20 @@ import {
   emptyContent,
 } from '../Util';
 
+import { ARIA_ACTION_CONTAINER } from '../DefaultConfig';
+
 const ARIA_POPUP_ARROW = 'aria-scribio-popup-arrow';
 const ARIA_POPUP_TITLE = 'aria-scribio-popup-title';
 const ARIA_POPUP_CONTAINER = 'aria-scribio-popup-container';
 const ARIA_POPUP_ERROR = 'aria-popup-error';
+const ARIA_POPUP_LOADING = 'aria-popup-loading';
 
 export {
   ARIA_POPUP_TITLE,
   ARIA_POPUP_CONTAINER,
   ARIA_POPUP_ERROR,
   ARIA_POPUP_ARROW,
+  ARIA_POPUP_LOADING,
 };
 
 const defaultConfig = {
@@ -26,9 +30,10 @@ const defaultConfig = {
   },
   popupTemplate: `
 <div class="scribio-popup">
-    <div class="scribio-popup-arrow" ${ARIA_POPUP_ARROW} style="background:blue;width:4px;height:4px;"></div>
+    <div class="scribio-popup-arrow" ${ARIA_POPUP_ARROW}></div>
     <div class="scribio-popup-title" ${ARIA_POPUP_TITLE}></div>
     <div class="scribio-popup-container" ${ARIA_POPUP_CONTAINER}></div>
+    <div class="scribio-popup-loading" ${ARIA_POPUP_LOADING}>Loading</div>
     <div class="scribio-popup-error" ${ARIA_POPUP_ERROR}></div>
 </div>
 `,
@@ -43,6 +48,7 @@ class Popup {
     this.isLoading = true;
 
     this.listener = (e) => {
+      if (this.isLoading) return;
       if (this.popper === null || this.markup === null) return;
       if (this.markup.contains(e.target)) return;
       if (instance.ariaElement.contains(e.target)) return;
@@ -76,12 +82,15 @@ class Popup {
   }
 
   loading(status) {
-    console.log(`popup loading state: ${status}`);
     if (this.isLoading === status) return;
+    const loadingContainer = this.markup.querySelector(`[${ARIA_POPUP_LOADING}]`);
+    if (loadingContainer === null) return;
+    loadingContainer.style.display = status ? '' : 'none';
     this.isLoading = status;
   }
 
   destroy() {
+    this.loading(false);
     document.removeEventListener('click', this.listener, true);
     this.markup.remove();
     this.popper.destroy();
