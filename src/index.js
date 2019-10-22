@@ -14,17 +14,27 @@ Scribio.registerType('select', SelectType);
 Scribio.registerType('checkbox', CheckboxType);
 Scribio.registerType('radio', RadioType);
 
+const dataSource = [];
+for (let i = 0; i < 5; i += 1) dataSource.push({ value: i, text: `option-${i}` });
+
 Scribio.span(document.querySelector('#scribio'), {
   type: {
     config: {
-      type: 'number',
+      type: 'textarea',
       attributes: 'min="0" max="10" step="2"',
     },
   },
-  currentValue: 5,
+  currentValue: 4,
+  handler: {
+    validate: () => false,
+  },
 });
 Scribio.span(document.querySelector('#select'), {
-  type: { name: 'select' },
+  type: { name: 'select', config: { dataSource } },
 });
-Scribio.span(document.querySelector('#checkbox'), 'checkbox');
-Scribio.span(document.querySelector('#radio'), 'radio');
+Scribio.span(document.querySelector('#checkbox'), {
+  type: { name: 'checkbox', config: { dataSource } },
+});
+Scribio.span(document.querySelector('#radio'), {
+  type: { name: 'radio', config: { dataSource } },
+});

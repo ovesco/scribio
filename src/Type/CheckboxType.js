@@ -4,11 +4,8 @@ import { resolveConfig } from '../Util';
 
 const CHECKBOX_NAME = 'scribio-checkbox-type';
 
-const options = [];
-for (let i = 0; i < 4; i++) options.push({ value: i, text: `option-${i}` });
-
 const defaultConfig = {
-  dataSource: options,
+  dataSource: [],
   containerClass: '',
   checkboxClass: '',
   labelClass: '',

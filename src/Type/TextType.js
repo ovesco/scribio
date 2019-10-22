@@ -16,7 +16,6 @@ const defaultConfig = {
 export default class {
   constructor(instance, givenConfig = {}) {
     this.config = resolveConfig(merge(defaultConfig, givenConfig));
-    console.log(this.config('class'));
     this.instance = instance;
   }
 
@@ -37,6 +36,8 @@ export default class {
   }
 
   getTemplate() {
-    return `<div><input ${this.config('attributes')} type="${this.config('type')}" ${ARIA_TEXT_INPUT} class="${this.config('class')}"></div>`;
+    const type = this.config('type');
+    const tag = type === 'textarea' ? type : 'input';
+    return `<div><${tag} ${this.config('attributes')} type="${this.config('type')}" ${ARIA_TEXT_INPUT} class="${this.config('class')}" /></div>`;
   }
 }

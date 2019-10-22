@@ -7,12 +7,9 @@ import { resolveConfig } from '../Util';
 
 const ARIA_SELECT = 'aria-select-field';
 
-const options = [];
-for (let i = 0; i < 10; i++) options.push({ value: i, text: `option-${i}` });
-
 const defaultConfig = {
   multiple: false,
-  dataSource: options,
+  dataSource: [],
   class: '',
 };
 

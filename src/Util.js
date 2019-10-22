@@ -21,7 +21,9 @@ export const themeResolver = (themes, ld, name) => themes.flatMap(ld)
 
 export const parseTemplate = (template) => {
   if (template instanceof Element || template instanceof Node) return template;
-  return (new DOMParser()).parseFromString(template, 'text/html').body.firstElementChild;
+  let item = template;
+  if (typeof template === 'function') item = template();
+  return (new DOMParser()).parseFromString(item, 'text/html').body.firstElementChild;
 };
 
 export const parseTemplateAsync = (template) => Promise.resolve(template)

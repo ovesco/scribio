@@ -7,11 +7,8 @@ import { resolveConfig } from '../Util';
 
 const RADIO_NAME = 'scribio-radio-type';
 
-const options = [];
-for (let i = 0; i < 5; i++) options.push({ value: i, text: `option-${i}` });
-
 const defaultConfig = {
-  dataSource: options,
+  dataSource: [],
   containerClass: '',
   labelClass: '',
   radioClass: '',

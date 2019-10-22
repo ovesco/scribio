@@ -1,8 +1,13 @@
 import merge from 'deepmerge';
 import Popper from 'popper.js';
 
-import { resolveConfig, parseTemplate, emptyContent } from '../Util';
+import {
+  resolveConfig,
+  parseTemplate,
+  emptyContent,
+} from '../Util';
 
+const ARIA_POPUP_ARROW = 'aria-scribio-popup-arrow';
 const ARIA_POPUP_TITLE = 'aria-scribio-popup-title';
 const ARIA_POPUP_CONTAINER = 'aria-scribio-popup-container';
 const ARIA_POPUP_ERROR = 'aria-popup-error';
@@ -11,12 +16,17 @@ export {
   ARIA_POPUP_TITLE,
   ARIA_POPUP_CONTAINER,
   ARIA_POPUP_ERROR,
+  ARIA_POPUP_ARROW,
 };
 
 const defaultConfig = {
-  popperConfig: {},
+  popperConfig: {
+    placement: 'right',
+    positionFixed: true,
+  },
   popupTemplate: `
 <div class="scribio-popup">
+    <div class="scribio-popup-arrow" ${ARIA_POPUP_ARROW} style="background:blue;width:4px;height:4px;"></div>
     <div class="scribio-popup-title" ${ARIA_POPUP_TITLE}></div>
     <div class="scribio-popup-container" ${ARIA_POPUP_CONTAINER}></div>
     <div class="scribio-popup-error" ${ARIA_POPUP_ERROR}></div>
@@ -27,7 +37,8 @@ const defaultConfig = {
 class Popup {
   constructor(instance, config = {}) {
     this.instance = instance;
-    this.config = resolveConfig(merge(defaultConfig, config), this);
+    this.rawConfig = merge(defaultConfig, config);
+    this.config = resolveConfig(this.rawConfig, this);
     this.markup = parseTemplate(this.config('popupTemplate'));
     this.isLoading = true;
 
@@ -41,11 +52,17 @@ class Popup {
     // Show popup
     document.addEventListener('click', this.listener, true);
     document.body.append(this.markup);
-    this.popper = new Popper(this.instance.ariaElement, this.markup, this.config('popperConfig'));
+    // eslint-disable-next-line
+    this.popper = new Popper(this.instance.ariaElement, this.markup, merge(this.rawConfig.popperConfig, {
+      modifiers: {
+        arrow: {
+          element: `[${ARIA_POPUP_ARROW}]`,
+        },
+      },
+    }));
   }
 
   error(error) {
-    console.log(error);
     const container = this.markup.querySelector(`[${ARIA_POPUP_ERROR}]`);
     emptyContent(container);
     container.innerHTML = error;
@@ -55,6 +72,7 @@ class Popup {
     const container = this.markup.querySelector(`[${ARIA_POPUP_CONTAINER}]`);
     emptyContent(container);
     container.appendChild(markup);
+    this.popper.scheduleUpdate();
   }
 
   loading(status) {
@@ -72,6 +90,4 @@ class Popup {
   }
 }
 
-export default (instance, config = {}) => {
-  return new Popup(instance, config);
-};
+export default (instance, config = {}) => new Popup(instance, config);

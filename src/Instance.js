@@ -53,7 +53,7 @@ export default class {
     const value = this.type.getInputValue(markup.querySelector(`[${ARIA_EDIT_CONTAINER}]`));
     if (value === this.value) this.close();
     else if (this.config('handler.validate')(value) !== true) {
-      renderer.error('Invalid value provided');
+      this.submitError(new Error('Invalid value provided'));
     } else {
       renderer.loading(true);
       const handler = this.config('handler.onSubmit');
@@ -62,10 +62,18 @@ export default class {
         this.refreshContent();
         this.close();
       }, (error) => {
-        renderer.error(this.config('handler.errorDisplay')(error));
-        renderer.loading(false);
+        this.submitError(error);
       });
     }
+  }
+
+  submitError(error) {
+    if (this.renderSession === null) return;
+    const { renderer } = this.renderSession;
+    this.config('handler.onError')(error, () => {
+      renderer.error(this.config('handler.errorDisplay')(error));
+      renderer.loading(false);
+    });
   }
 
   close() {

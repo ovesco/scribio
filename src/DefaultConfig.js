@@ -42,6 +42,9 @@ export default {
         else onError(new Error('Server error labite'));
       });
     },
+    onError(error, forward) {
+      forward();
+    },
     errorDisplay(error) {
       return error.message;
     },

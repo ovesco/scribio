@@ -1,4 +1,9 @@
-import { ARIA_POPUP_CONTAINER, ARIA_POPUP_ERROR, ARIA_POPUP_TITLE } from '../Renderer/PopupRenderer';
+import {
+  ARIA_POPUP_CONTAINER,
+  ARIA_POPUP_ERROR,
+  ARIA_POPUP_TITLE,
+  ARIA_POPUP_ARROW,
+} from '../Renderer/PopupRenderer';
 import {
   ARIA_EDIT_CONTAINER,
   ARIA_ACTION_CONTAINER,
@@ -37,18 +42,30 @@ export default (size = 'md') => ({
     {
       name: 'popup',
       config: {
-        popupTemplate: `
-<div class="popover fade show bs-popover-top">
+        popupTemplate() {
+          return `
+<div class="popover fade show bs-popover-${this.config('popperConfig.placement')}">
+    <div class="arrow" ${ARIA_POPUP_ARROW}></div>
     <h3 class="popover-header ${ARIA_POPUP_TITLE}"></h3>
     <div class="popover-body">
         <div ${ARIA_POPUP_CONTAINER}></div>
-        <div class="text-error" ${ARIA_POPUP_ERROR}></div>
+        <div class="invalid-feedback d-block" ${ARIA_POPUP_ERROR}></div>
     </div>
-</div>`,
+</div>`;
+        },
       },
     },
   ],
   config: {
+    handler: {
+      onError(error, forward) {
+        const { markup } = this.renderSession;
+        [...markup.querySelectorAll('input'), ...markup.querySelectorAll('textarea')].forEach((input) => {
+          input.classList.add('is-invalid');
+        });
+        forward();
+      },
+    },
     template: {
       edit: `
 <div>
