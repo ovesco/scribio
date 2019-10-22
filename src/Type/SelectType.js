@@ -11,7 +11,7 @@ const options = [];
 for (let i = 0; i < 10; i++) options.push({ value: i, text: `option-${i}` });
 
 const defaultConfig = {
-  multiple: true,
+  multiple: false,
   dataSource: options,
   class: '',
 };
@@ -34,8 +34,12 @@ export default class {
     return value.map((v) => this.source.find((it) => `${it.value}` === `${v}`).text).join(', ');
   }
 
-  onDisplay(rootNode, value) {
-    rootNode.querySelector(`[${ARIA_SELECT}]`).value = value;
+  onDisplay(select, value) {
+    const values = (!this.config('multiple')) ? [value] : value;
+    values.forEach((v) => {
+      console.log(v, [...select.options].find((it) => `${it.value}` === `${v}`));
+      [...select.options].find((it) => `${it.value}` === `${v}`).selected = true;
+    });
   }
 
   onDestroy() {
@@ -57,9 +61,7 @@ export default class {
           option.innerHTML = text;
           select.appendChild(option);
         });
-        setTimeout(() => {
-          resolve(select);
-        }, 1000);
+        resolve(select);
       });
     });
   }

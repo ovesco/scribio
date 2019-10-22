@@ -40,6 +40,7 @@ export default class {
       parseTemplateAsync(this.type.getTemplate()).then((typeMarkup) => {
         markup.querySelector(`[${ARIA_EDIT_CONTAINER}]`).appendChild(typeMarkup);
         renderSession.show(markup);
+        this.type.onDisplay(typeMarkup, this.value);
         renderSession.loading(false);
         this.renderSession = { renderer: renderSession, markup };
       });

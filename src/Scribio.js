@@ -31,7 +31,6 @@ class Scribio {
 
   span(container, givenConfig = {}) {
     const config = merge(this.defaultConfig, givenConfig);
-    console.log(config);
     return new Instance(
       container,
       this.getType(config.type),
