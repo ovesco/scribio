@@ -63,14 +63,14 @@ export default (size = 'md') => ({
   config: {
     handler: {
       onError(error, forward) {
-        const { markup } = this.renderSession;
+        const { markup } = this.session;
         [...markup.querySelectorAll('input'), ...markup.querySelectorAll('textarea')].forEach((input) => {
           input.classList.add('is-invalid');
         });
-        forward();
+        forward(error);
       },
       onLoading(status) {
-        const { markup } = this.renderSession;
+        const { markup } = this.session;
         const btn = markup.querySelector(`[${ARIA_SUBMIT_BTN}]`);
         if (status) {
           btn.insertAdjacentElement('afterbegin', parseTemplate(`<span class="spinner-border mr-1 spinner-border-${size}" role="status" aria-hidden="true"></span>`));

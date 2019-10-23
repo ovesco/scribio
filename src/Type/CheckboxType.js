@@ -3,7 +3,7 @@
 
 import merge from 'deepmerge';
 
-import { resolveConfig } from '../Util';
+import BaseChoiceType from './BaseChoiceType';
 
 const CHECKBOX_NAME = 'scribio-checkbox-type';
 
@@ -14,37 +14,25 @@ const defaultConfig = {
   labelClass: '',
 };
 
-export default class {
+export default class extends BaseChoiceType {
   constructor(instance, givenConfig = {}) {
-    this.config = resolveConfig(merge(defaultConfig, givenConfig));
-    this.instance = instance;
-    this.source = [];
+    super(instance, merge(defaultConfig, givenConfig), CHECKBOX_NAME);
   }
 
-  getInputValue(rootNode) {
-    const values = [...rootNode.querySelectorAll(`[name="${CHECKBOX_NAME}"]`)]
-      .filter((it) => it.checked).map((it) => it.value);
-    return values.length > 0 ? values : this.instance.config('emptyValue');
-  }
-
-  getReadableValue(values) {
-    return values.map((v) => this.source.find((it) => `${it.value}` === `${v}`).text).join(', ');
-  }
-
-  onDisplay(rootNode, values) {
-    if (values === this.instance.config('emptyValue')) return;
-    const checkboxs = [...rootNode.querySelectorAll(`[name="${CHECKBOX_NAME}"]`)];
-    values.forEach((v) => {
-      checkboxs.find((it) => `${it.value}` === `${v}`).checked = true;
+  show(rootNode, value) {
+    return this.internalShow(rootNode, value, (markup) => {
+      const checkboxs = [...markup.querySelectorAll(`[name="${CHECKBOX_NAME}"]`)];
+      value.forEach((v) => {
+        checkboxs.find((it) => `${it.value}` === `${v}`).checked = true;
+      });
     });
   }
 
-  disable(rootNode, status) {
-    [...rootNode.querySelectorAll(`[name="${CHECKBOX_NAME}"]`)].forEach((cb) => { cb.disabled = status; });
-  }
-
-  onDestroy() {
-    return null;
+  getInputValue() {
+    const { markup } = this;
+    const values = [...markup.querySelectorAll(`[name="${CHECKBOX_NAME}"]`)]
+      .filter((it) => it.checked).map((it) => it.value);
+    return values.length > 0 ? values : this.instance.config('emptyValue');
   }
 
   getTemplate() {

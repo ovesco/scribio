@@ -39,7 +39,8 @@ class Scribio {
   getRenderer({ name, config }) {
     if (!this.renderers.has(name)) throw new Error(`Unknown renderer ${name}`);
     const themeConfig = themeResolver(this.themes, (t) => t.renderers, name);
-    return (instance) => this.renderers.get(name)(instance, merge(themeConfig, config));
+    const Renderer = this.renderers.get(name);
+    return (instance) => new Renderer(instance, merge(themeConfig, config));
   }
 
   span(container, givenConfig = {}) {

@@ -24,9 +24,9 @@ Scribio.span(document.querySelector('#scribio'), {
       attributes: 'min="0" max="10" step="2"',
     },
   },
-  currentValue: 4,
+  currentValue: '4',
   handler: {
-    validate: () => false,
+    validate: () => true,
   },
 });
 Scribio.span(document.querySelector('#select'), {

@@ -29,6 +29,15 @@ export default {
   emptyValue: null,
   currentValue: null,
   voidDisplay: 'Empty',
+  valueDisplay(value) {
+    if (this.session !== null) return this.session.type.getReadableValue(value);
+    return new Promise((resolve) => {
+      const type = this.createType();
+      Promise.resolve(type.init()).then(() => {
+        resolve(type.getReadableValue(value));
+      });
+    });
+  },
   handler: {
     mode: 'button', // onchange
     onSubmit(value, onSuccess, onError) {
@@ -41,10 +50,10 @@ export default {
       setTimeout(() => {
         if (Math.random() > 0.00001) onSuccess(value);
         else onError(new Error('Server error labite'));
-      }, 3000);
+      }, 2000);
     },
     onError(error, forward) {
-      forward();
+      forward(error);
     },
     onLoading: () => null,
     errorDisplay(error) {

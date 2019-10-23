@@ -1,26 +1,34 @@
 /* eslint-disable class-methods-use-this */
-
 import merge from 'deepmerge';
 
-import { resolveConfig } from '../Util';
+import BaseChoiceType from './BaseChoiceType';
 
 const ARIA_SELECT = 'aria-select-field';
 
 const defaultConfig = {
   multiple: false,
-  dataSource: [],
+  dataSource: () => [],
   class: '',
 };
 
-export default class {
+export default class extends BaseChoiceType {
   constructor(instance, givenConfig = {}) {
-    this.config = resolveConfig(merge(defaultConfig, givenConfig));
-    this.instance = instance;
-    this.source = [];
+    super(instance, merge(defaultConfig, givenConfig), ARIA_SELECT);
   }
 
-  getInputValue(rootNode) {
-    const select = rootNode.querySelector(`[${ARIA_SELECT}]`);
+  show(rootNode, value) {
+    return this.internalShow(rootNode, value, (markup) => {
+      const values = (!this.config('multiple')) ? [value] : value;
+      values.forEach((v) => {
+        const select = markup.querySelector(`[${ARIA_SELECT}]`);
+        [...select.options].find((it) => `${it.value}` === `${v}`).selected = true;
+      });
+    });
+  }
+
+  getInputValue() {
+    const { markup } = this;
+    const select = markup.querySelector(`[${ARIA_SELECT}]`);
     if (!this.config('multiple')) return select.value;
     const values = [...select.options].filter((o) => o.selected).map((o) => o.value);
     return values.length > 0 ? values : this.instance.config('emptyValue');
@@ -28,42 +36,15 @@ export default class {
 
   getReadableValue(value) {
     if (!this.config('multiple')) return this.source.find((it) => `${it.value}` === `${value}`).text;
-    return value.map((v) => this.source.find((it) => `${it.value}` === `${v}`).text).join(', ');
-  }
-
-  disable(rootNode, status) {
-    rootNode.disabled = status;
-  }
-
-  onDisplay(select, value) {
-    if (this.instance.config('emptyValue') === value) return;
-    const values = (!this.config('multiple')) ? [value] : value;
-    values.forEach((v) => {
-      [...select.options].find((it) => `${it.value}` === `${v}`).selected = true;
-    });
-  }
-
-  onDestroy() {
-    return null;
+    return super.getReadableValue(value);
   }
 
   getTemplate() {
     return new Promise((resolve) => {
-      Promise.resolve(this.config('dataSource')).then((data) => {
-        this.source = data;
-        const select = document.createElement('select');
-        const cls = this.config('class');
-        if (!['', null, undefined].includes(cls)) cls.split(' ').forEach((c) => select.classList.add(c));
-        select.setAttribute(ARIA_SELECT, '');
-        if (this.config('multiple')) select.setAttribute('multiple', '1');
-        data.forEach(({ value, text }) => {
-          const option = document.createElement('option');
-          option.setAttribute('value', value);
-          option.innerHTML = text;
-          select.appendChild(option);
-        });
-        resolve(select);
-      });
+      let html = `<div><select class="${this.config('class')}" ${ARIA_SELECT}>`;
+      html += this.source.map(({ text, value }) => `<option value="${value}">${text}</option>`).join('');
+      html += '</select></div>';
+      resolve(html);
     });
   }
 }

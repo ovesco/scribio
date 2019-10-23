@@ -3,7 +3,7 @@
 
 import merge from 'deepmerge';
 
-import { resolveConfig } from '../Util';
+import BaseChoiceType from './BaseChoiceType';
 
 const RADIO_NAME = 'scribio-radio-type';
 
@@ -14,35 +14,26 @@ const defaultConfig = {
   radioClass: '',
 };
 
-export default class {
+export default class extends BaseChoiceType {
   constructor(instance, givenConfig = {}) {
-    this.config = resolveConfig(merge(defaultConfig, givenConfig));
-    this.instance = instance;
-    this.source = [];
+    super(instance, merge(defaultConfig, givenConfig), RADIO_NAME);
   }
 
-  getInputValue(rootNode) {
-    const radio = [...rootNode.querySelectorAll(`[name="${RADIO_NAME}"]`)]
+  show(rootNode, value) {
+    return this.internalShow(rootNode, value, (markup) => {
+      const radios = [...markup.querySelectorAll(`[name="${RADIO_NAME}"]`)];
+      radios.find((it) => `${it.value}` === `${value}`).checked = true;
+    });
+  }
+
+  getInputValue() {
+    const radio = [...this.markup.querySelectorAll(`[name="${RADIO_NAME}"]`)]
       .filter((it) => it.checked);
     return radio.length === 1 ? radio[0].value : this.instance.config('emptyValue');
   }
 
   getReadableValue(value) {
-    return this.source.find((it) => `${it.value}` === `${value}`).text;
-  }
-
-  onDisplay(rootNode, value) {
-    if (value === this.instance.config('emptyValue')) return;
-    const radios = [...rootNode.querySelectorAll(`[name="${RADIO_NAME}"]`)];
-    radios.find((it) => `${it.value}` === `${value}`).checked = true;
-  }
-
-  disable(rootNode, status) {
-    [...rootNode.querySelectorAll(`[name="${RADIO_NAME}"]`)].forEach((radio) => { radio.disabled = status; });
-  }
-
-  onDestroy() {
-    return null;
+    return super.getReadableValue([value]);
   }
 
   getTemplate() {

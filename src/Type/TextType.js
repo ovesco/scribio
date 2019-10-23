@@ -3,7 +3,7 @@
 
 import merge from 'deepmerge';
 
-import { resolveConfig } from '../Util';
+import { resolveConfig, parseTemplate } from '../Util';
 
 const ARIA_TEXT_INPUT = 'aria-scribio-text-input';
 
@@ -17,30 +17,37 @@ export default class {
   constructor(instance, givenConfig = {}) {
     this.config = resolveConfig(merge(defaultConfig, givenConfig));
     this.instance = instance;
+    this.markup = null;
+    this.rootNode = null;
   }
 
-  getInputValue(rootNode) {
-    return rootNode.querySelector(`[${ARIA_TEXT_INPUT}]`).value;
+  init() {
+    return null;
+  }
+
+  show(rootNode, value) {
+    this.rootNode = rootNode;
+    this.rootNode = rootNode;
+    const markup = parseTemplate(this.getTemplate());
+    markup.querySelector(`[${ARIA_TEXT_INPUT}]`).value = value;
+    this.markup = markup;
+    this.rootNode.appendChild(markup);
+  }
+
+  getInputValue() {
+    return this.markup.querySelector(`[${ARIA_TEXT_INPUT}]`).value;
   }
 
   getReadableValue(value) {
     return value;
   }
 
-  onDisplay(rootNode, value) {
-    rootNode.querySelector(`[${ARIA_TEXT_INPUT}]`).value = value;
-  }
-
-  disable(rootNode, status) {
-    rootNode.querySelector(`[${ARIA_TEXT_INPUT}]`).disabled = status;
-  }
-
-  onChange(rootNode, callback) {
-
+  disable(status) {
+    this.markup.querySelector(`[${ARIA_TEXT_INPUT}]`).disabled = status;
   }
 
   onDestroy() {
-    return null;
+    this.markup.remove();
   }
 
   getTemplate() {

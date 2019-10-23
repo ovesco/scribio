@@ -7,8 +7,6 @@ import {
   emptyContent,
 } from '../Util';
 
-import { ARIA_ACTION_CONTAINER } from '../DefaultConfig';
-
 const ARIA_POPUP_ARROW = 'aria-scribio-popup-arrow';
 const ARIA_POPUP_TITLE = 'aria-scribio-popup-title';
 const ARIA_POPUP_CONTAINER = 'aria-scribio-popup-container';
@@ -39,33 +37,39 @@ const defaultConfig = {
 `,
 };
 
-class Popup {
+export default class {
   constructor(instance, config = {}) {
     this.instance = instance;
     this.rawConfig = merge(defaultConfig, config);
     this.config = resolveConfig(this.rawConfig, this);
-    this.markup = parseTemplate(this.config('popupTemplate'));
-    this.isLoading = true;
+  }
 
-    this.listener = (e) => {
-      if (this.isLoading) return;
-      if (this.popper === null || this.markup === null) return;
-      if (this.markup.contains(e.target)) return;
-      if (instance.ariaElement.contains(e.target)) return;
-      instance.close();
-    };
+  init() {
+    return new Promise((resolve) => {
+      this.markup = parseTemplate(this.config('popupTemplate'));
+      this.isLoading = true;
 
-    // Show popup
-    document.addEventListener('click', this.listener, true);
-    document.body.append(this.markup);
-    // eslint-disable-next-line
-    this.popper = new Popper(this.instance.ariaElement, this.markup, merge(this.rawConfig.popperConfig, {
-      modifiers: {
-        arrow: {
-          element: `[${ARIA_POPUP_ARROW}]`,
+      this.listener = (e) => {
+        if (this.isLoading) return;
+        if (this.popper === null || this.markup === null) return;
+        if (this.markup.contains(e.target)) return;
+        if (this.instance.ariaElement.contains(e.target)) return;
+        this.instance.close();
+      };
+
+      // Show popup
+      document.addEventListener('click', this.listener, true);
+      document.body.append(this.markup);
+      // eslint-disable-next-line
+      this.popper = new Popper(this.instance.ariaElement, this.markup, merge(this.rawConfig.popperConfig, {
+        modifiers: {
+          arrow: {
+            element: `[${ARIA_POPUP_ARROW}]`,
+          },
         },
-      },
-    }));
+      }));
+      resolve();
+    });
   }
 
   error(error) {
@@ -98,5 +102,3 @@ class Popup {
     this.popper = null;
   }
 }
-
-export default (instance, config = {}) => new Popup(instance, config);
