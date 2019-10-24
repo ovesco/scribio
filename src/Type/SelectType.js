@@ -7,7 +7,7 @@ const ARIA_SELECT = 'aria-select-field';
 
 const defaultConfig = {
   multiple: false,
-  dataSource: () => [],
+  dataSource: [],
   class: '',
 };
 

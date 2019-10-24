@@ -16,22 +16,25 @@ export default class {
   }
 
   open() {
-    Promise.resolve(this.renderer.init()).then(() => {
-      this.renderer.loading(true);
-      parseTemplateAsync(this.config('template.edit')).then((editMarkup) => {
-        parseTemplateAsync(this.config('template.buttons')).then((buttonsMarkup) => {
-          if (this.config('handler.mode') === 'button') {
-            buttonsMarkup.querySelector(`[${ARIA_SUBMIT_BTN}]`).addEventListener('click', () => this.submit());
-            buttonsMarkup.querySelector(`[${ARIA_CANCEL_BTN}]`).addEventListener('click', () => this.instance.close());
-            editMarkup.querySelector(`[${ARIA_ACTION_CONTAINER}]`).appendChild(buttonsMarkup);
-          }
-          this.markup = editMarkup;
+    return new Promise((resolve) => {
+      Promise.resolve(this.renderer.init()).then(() => {
+        this.renderer.loading(true);
+        parseTemplateAsync(this.config('template.edit')).then((editMarkup) => {
+          parseTemplateAsync(this.config('template.buttons')).then((buttonsMarkup) => {
+            if (this.config('handler.mode') === 'button') {
+              buttonsMarkup.querySelector(`[${ARIA_SUBMIT_BTN}]`).addEventListener('click', () => this.submit());
+              buttonsMarkup.querySelector(`[${ARIA_CANCEL_BTN}]`).addEventListener('click', () => this.instance.close());
+              editMarkup.querySelector(`[${ARIA_ACTION_CONTAINER}]`).appendChild(buttonsMarkup);
+            }
+            this.markup = editMarkup;
 
-          // Init type
-          Promise.resolve(this.type.init()).then(() => {
-            Promise.resolve(this.type.show(this.markup.querySelector(`[${ARIA_EDIT_CONTAINER}]`), this.instance.value)).then(() => {
-              this.renderer.show(this.markup);
-              this.renderer.loading(false);
+            // Init type
+            Promise.resolve(this.type.init()).then(() => {
+              Promise.resolve(this.type.show(this.markup.querySelector(`[${ARIA_EDIT_CONTAINER}]`), this.instance.value)).then(() => {
+                this.renderer.show(this.markup);
+                this.renderer.loading(false);
+                resolve();
+              });
             });
           });
         });
@@ -74,10 +77,15 @@ export default class {
   }
 
   destroySession() {
-    this.renderer.destroy();
-    this.type.onDestroy();
-    this.renderer = null;
-    this.type = null;
-    this.markup.remove();
+    return new Promise((resolve) => {
+      Promise.resolve(this.type.onDestroy()).then(() => {
+        Promise.resolve(this.renderer.destroy()).then(() => {
+          this.renderer = null;
+          this.type = null;
+          this.markup.remove();
+          resolve();
+        });
+      });
+    });
   }
 }

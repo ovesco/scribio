@@ -1,6 +1,7 @@
 const ARIA_EDIT_CONTAINER = 'aria-scribio-edit-container';
 const ARIA_ACTION_CONTAINER = 'aria-scribio-action-container';
 const ARIA_READ_ELEMENT = 'aria-scribio-read-element';
+const ARIA_LOADING_CONTAINER = 'aria-loading-container';
 
 const ARIA_SUBMIT_BTN = 'aria-scribio-submit-btn';
 const ARIA_CANCEL_BTN = 'aria-scribio-cancel-btn';
@@ -11,6 +12,7 @@ export {
   ARIA_READ_ELEMENT,
   ARIA_CANCEL_BTN,
   ARIA_SUBMIT_BTN,
+  ARIA_LOADING_CONTAINER,
 };
 
 export default {
@@ -26,6 +28,7 @@ export default {
     url: null,
     requestParams: {},
   },
+  trigger: 'click', // 'hover', 'none'
   emptyValue: null,
   currentValue: null,
   voidDisplay: 'Empty',
@@ -77,6 +80,9 @@ export default {
     read: `
 <div class="scribio-read-container">
     <span ${ARIA_READ_ELEMENT}></span>
+    <div ${ARIA_LOADING_CONTAINER}></div>
 </div>`,
+    loading: `
+<div>Loading</div>`,
   },
 };

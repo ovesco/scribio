@@ -47,7 +47,7 @@ export default class {
   }
 
   onDestroy() {
-    this.markup.remove();
+    return null;
   }
 
   getTemplate() {

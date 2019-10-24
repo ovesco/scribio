@@ -26,6 +26,8 @@ const defaultConfig = {
     placement: 'right',
     positionFixed: true,
   },
+  transitionDuration: 300,
+  closeOnClickOutside: true,
   popupTemplate: `
 <div class="scribio-popup">
     <div class="scribio-popup-arrow" ${ARIA_POPUP_ARROW}></div>
@@ -47,6 +49,8 @@ export default class {
   init() {
     return new Promise((resolve) => {
       this.markup = parseTemplate(this.config('popupTemplate'));
+      this.markup.style.opacity = '0';
+      this.markup.style.transition = `opacity ${this.config('transitionDuration') / 1000}s`;
       this.isLoading = true;
 
       this.listener = (e) => {
@@ -58,7 +62,9 @@ export default class {
       };
 
       // Show popup
-      document.addEventListener('click', this.listener, true);
+      if (this.config('closeOnClickOutside')) {
+        document.addEventListener('click', this.listener, true);
+      }
       document.body.append(this.markup);
       // eslint-disable-next-line
       this.popper = new Popper(this.instance.ariaElement, this.markup, merge(this.rawConfig.popperConfig, {
@@ -80,6 +86,7 @@ export default class {
 
   show(markup) {
     const container = this.markup.querySelector(`[${ARIA_POPUP_CONTAINER}]`);
+    this.markup.style.opacity = '1';
     emptyContent(container);
     container.appendChild(markup);
     this.popper.scheduleUpdate();
@@ -94,11 +101,19 @@ export default class {
   }
 
   destroy() {
-    this.loading(false);
-    document.removeEventListener('click', this.listener, true);
-    this.markup.remove();
-    this.popper.destroy();
-    this.markup = null;
-    this.popper = null;
+    return new Promise((resolve) => {
+      this.markup.style.opacity = '0';
+      setTimeout(() => {
+        this.loading(false);
+        if (this.config('closeOnClickOutside')) {
+          document.removeEventListener('click', this.listener, true);
+        }
+        this.markup.remove();
+        this.popper.destroy();
+        this.markup = null;
+        this.popper = null;
+        resolve();
+      }, this.config('transitionDuration'));
+    });
   }
 }

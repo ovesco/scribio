@@ -13,6 +13,8 @@ import {
   ARIA_ACTION_CONTAINER,
   ARIA_SUBMIT_BTN,
   ARIA_CANCEL_BTN,
+  ARIA_LOADING_CONTAINER,
+  ARIA_READ_ELEMENT,
 } from '../DefaultConfig';
 
 export default (size = 'md') => ({
@@ -93,6 +95,13 @@ export default (size = 'md') => ({
     <button type="button" class="btn btn-primary btn-${size}" ${ARIA_SUBMIT_BTN}>Ok</button>
     <button type="button" class="btn btn-light btn-${size}" ${ARIA_CANCEL_BTN}>Cancel</button>
 </div>`,
+      read: `
+<div class="scribio-read-container d-flex">
+    <span ${ARIA_READ_ELEMENT}></span>
+    <div ${ARIA_LOADING_CONTAINER}></div>
+</div>`,
+      loading: `
+<div class="ml-2"><div class="spinner-border text-primary spinner-border-${size}" role="status"></div></div>`,
     },
   },
 });
