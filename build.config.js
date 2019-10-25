@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 const path = require('path');
 const MinifyPlugin = require('babel-minify-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
