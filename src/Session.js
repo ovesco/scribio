@@ -21,9 +21,17 @@ export default class {
         this.renderer.loading(true);
         parseTemplateAsync(this.config('template.edit')).then((editMarkup) => {
           parseTemplateAsync(this.config('template.buttons')).then((buttonsMarkup) => {
-            if (this.config('handler.mode') === 'button') {
-              buttonsMarkup.querySelector(`[${ARIA_SUBMIT_BTN}]`).addEventListener('click', () => this.submit());
-              buttonsMarkup.querySelector(`[${ARIA_CANCEL_BTN}]`).addEventListener('click', () => this.instance.close());
+            if (this.config('buttons.enabled')) {
+              const submitBtn = buttonsMarkup.querySelector(`[${ARIA_SUBMIT_BTN}]`);
+              const cancelBtn = buttonsMarkup.querySelector(`[${ARIA_CANCEL_BTN}]`);
+              submitBtn.addEventListener('click', () => this.submit());
+              cancelBtn.addEventListener('click', () => {
+                this.config('handler.onCancel')(() => {
+                  this.instance.close();
+                });
+              });
+              submitBtn.innerHTML = this.config('buttons.submitText');
+              cancelBtn.innerHTML = this.config('buttons.cancelText');
               editMarkup.querySelector(`[${ARIA_ACTION_CONTAINER}]`).appendChild(buttonsMarkup);
             }
             this.markup = editMarkup;
@@ -46,7 +54,7 @@ export default class {
     this.config('handler.onLoading')(status);
     this.renderer.loading(status);
     this.type.disable(status);
-    if (this.config('handler.mode') === 'button') {
+    if (this.config('buttons.enabled')) {
       this.markup.querySelector(`[${ARIA_CANCEL_BTN}]`).disabled = status;
       this.markup.querySelector(`[${ARIA_SUBMIT_BTN}]`).disabled = status;
     }

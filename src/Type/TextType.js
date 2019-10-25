@@ -35,7 +35,8 @@ export default class {
   }
 
   getInputValue() {
-    return this.markup.querySelector(`[${ARIA_TEXT_INPUT}]`).value;
+    const { value } = this.markup.querySelector(`[${ARIA_TEXT_INPUT}]`);
+    return value.trim() === '' ? this.instance.config('emptyValue') : value;
   }
 
   getReadableValue(value) {

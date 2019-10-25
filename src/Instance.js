@@ -1,4 +1,4 @@
-import {resolveConfig, parseTemplate, emptyContent } from './Util';
+import { resolveConfig, parseTemplate, emptyContent } from './Util';
 import { ARIA_READ_ELEMENT, ARIA_LOADING_CONTAINER } from './DefaultConfig';
 
 import Session from './Session';
@@ -20,9 +20,7 @@ export default class {
     const markup = parseTemplate(this.config('template.read'));
     const ariaElement = markup.querySelector(`[${ARIA_READ_ELEMENT}]`);
     if (this.config('trigger') !== 'none') {
-      ariaElement.addEventListener(this.config('trigger'), () => {
-        this.open();
-      });
+      ariaElement.addEventListener(this.config('trigger'), () => this.open(), true);
     }
     this.target.append(markup);
     return ariaElement;
@@ -45,16 +43,24 @@ export default class {
     if (this.session !== null) return this.session;
     this.setLoading(true);
     this.session = new Session(this);
-    this.session.open().then(() => {
-      this.setLoading(false);
+    this.config('handler.onOpen')(() => {
+      this.session.open().then(() => {
+        this.setLoading(false);
+      });
     });
     return this.session;
   }
 
+  destroy() {
+    emptyContent(this.target);
+  }
+
   close() {
     if (this.session === null) return;
-    Promise.resolve(this.session.destroySession()).then(() => {
-      this.session = null;
+    this.config('handler.onClose')(() => {
+      Promise.resolve(this.session.destroySession()).then(() => {
+        this.session = null;
+      });
     });
   }
 

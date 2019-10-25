@@ -9,6 +9,7 @@ const defaultConfig = {
   multiple: false,
   dataSource: [],
   class: '',
+  displaySeparator: ', ',
 };
 
 export default class extends BaseChoiceType {

@@ -17,7 +17,8 @@ export const resolveConfig = (config, item) => {
 export const themeResolver = (themes, ld, name) => themes.flatMap(ld)
   .filter((tu) => tu !== undefined)
   .filter((ty) => ty.name === name)
-  .reduce((ta, tb) => merge(ta.config, tb.config), {});
+  .map((xx) => xx.config)
+  .reduce((ta, tb) => merge(ta, tb), {});
 
 export const parseTemplate = (template) => {
   if (template instanceof Element || template instanceof Node) return template;

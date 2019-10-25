@@ -92,11 +92,11 @@ export default (size = 'md') => ({
 </div>`,
       buttons: `
 <div class="btn-group">
-    <button type="button" class="btn btn-primary btn-${size}" ${ARIA_SUBMIT_BTN}>Ok</button>
-    <button type="button" class="btn btn-light btn-${size}" ${ARIA_CANCEL_BTN}>Cancel</button>
+    <button type="button" class="btn btn-primary d-flex align-items-center btn-${size}" ${ARIA_SUBMIT_BTN}>Ok</button>
+    <button type="button" class="btn btn-light d-flex align-items-center btn-${size}" ${ARIA_CANCEL_BTN}>Cancel</button>
 </div>`,
       read: `
-<div class="scribio-read-container d-flex">
+<div class="scribio-read-container d-flex align-items-center">
     <span ${ARIA_READ_ELEMENT}></span>
     <div ${ARIA_LOADING_CONTAINER}></div>
 </div>`,

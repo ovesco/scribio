@@ -42,21 +42,23 @@ export default {
     });
   },
   handler: {
-    mode: 'button', // onchange
+    onOpen(forward) {
+      forward();
+    },
+    onClose(forward) {
+      forward();
+    },
     onSubmit(value, onSuccess, onError) {
-      /*
-      fetch(this.config('server.url'), merge(this.config('server.requestParams'), { value }))
+      fetch(this.config('server.url'), { ...this.config('server.requestParams'), value })
         .then((res) => res.json())
         .then(() => onSuccess(value))
         .catch((error) => onError(error));
-       */
-      setTimeout(() => {
-        if (Math.random() > 0.00001) onSuccess(value);
-        else onError(new Error('Server error labite'));
-      }, 2000);
     },
     onError(error, forward) {
       forward(error);
+    },
+    onCancel(forward) {
+      forward();
     },
     onLoading: () => null,
     errorDisplay(error) {
@@ -65,6 +67,11 @@ export default {
     validate() {
       return true;
     },
+  },
+  buttons: {
+    enabled: true,
+    submitText: 'Ok',
+    cancelText: 'Cancel',
   },
   template: {
     edit: `

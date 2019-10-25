@@ -8,12 +8,13 @@ const baseOptions = {
 };
 
 const variants = {
-  entry: ['', '.popper'],
+  entry: ['', '.popper', '.bootstrap-theme'],
 };
 
 module.exports = createVariants(baseOptions, variants, (options) => {
   return {
-    entry: `./src/index${options.entry}.js`,
+    mode: 'production',
+    entry: `./src/build/build${options.entry}.js`,
     devtool: options.preferredDevTool,
     optimization: {
       minimize: true,

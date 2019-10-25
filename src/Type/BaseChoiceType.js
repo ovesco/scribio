@@ -44,12 +44,13 @@ export default class {
   }
 
   getReadableValue(value) {
-    return value.map((v) => this.source.find((it) => `${it.value}` === `${v}`).text).join(', ');
+    const separator = this.config('displaySeparator') || ', ';
+    return value.map((v) => this.source.find((it) => `${it.value}` === `${v}`).text).join(separator);
   }
 
   disable(status) {
     this.markup.querySelectorAll(`[${this.aria}]`)
-      .forEach((n) => n.disabled = status);
+      .forEach((n) => { n.disabled = status; });
   }
 
   onDestroy() {

@@ -12,6 +12,7 @@ const defaultConfig = {
   containerClass: '',
   labelClass: '',
   radioClass: '',
+  displaySeparator: '',
 };
 
 export default class extends BaseChoiceType {

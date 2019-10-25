@@ -22,7 +22,7 @@ export {
 
 const defaultConfig = {
   popperConfig: {
-    placement: 'right',
+    placement: 'top',
     positionFixed: true,
   },
   popper: window.Popper,
