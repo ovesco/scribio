@@ -69,6 +69,11 @@ Scribio.span(document.getElementById('options'), {
       dataSource: [{ value: 1, text: 'Many options' }, { value: 2, text: 'Much possibilites' }, { value: 3, text: 'Such flexibility' }],
     },
   },
+  renderer: {
+    config: {
+      popperConfig: { placement: 'left' },
+    },
+  },
   buttons: {
     submitText: 'Ayyyy',
     cancelText: 'Lmfao',
