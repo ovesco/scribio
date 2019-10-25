@@ -1,0 +1,44 @@
+<!doctype html>
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Scribio documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/scribio.css">
+</head>
+
+<body>
+    <div>
+        <div class="main-header">
+            <div class="d-flex flex-column justify-content-center align-items-center header-content">
+                <div id="scribio" style="font-size:5em" class="text-white"></div>
+                <h3 class="text-white-50">A Javascript library for in-place editing</h3>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min.js"></script>
+    <script src="assets/scribio.js"></script>
+    <script type="text/javascript">
+        Scribio.span(document.getElementById('scribio'), {
+          currentValue: 'Scribio',
+          renderer: {
+            config: {
+              popperConfig: {
+                placement: 'top',
+              },
+            },
+          },
+          handler: {
+            onSubmit(value, onSuccess, onError) {
+              setTimeout(() => {
+                if (value.trim() === '') onError(new Error('Yo dont put an empty string!'));
+                else onSuccess(value);
+              }, 1500);
+            },
+          },
+        });
+    </script>
+</body>
+</html>

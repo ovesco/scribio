@@ -1,5 +1,4 @@
 import merge from 'deepmerge';
-import Popper from 'popper.js';
 
 import {
   resolveConfig,
@@ -26,6 +25,7 @@ const defaultConfig = {
     placement: 'right',
     positionFixed: true,
   },
+  popper: window.Popper,
   transitionDuration: 300,
   closeOnClickOutside: true,
   popupTemplate: `
@@ -43,6 +43,8 @@ export default class {
   constructor(instance, config = {}) {
     this.instance = instance;
     this.rawConfig = merge(defaultConfig, config);
+    this.popperLib = this.rawConfig.popper;
+    this.rawConfig.popper = null;
     this.config = resolveConfig(this.rawConfig, this);
   }
 
@@ -66,8 +68,9 @@ export default class {
         document.addEventListener('click', this.listener, true);
       }
       document.body.append(this.markup);
+      const Ppr = this.popperLib;
       // eslint-disable-next-line
-      this.popper = new Popper(this.instance.ariaElement, this.markup, merge(this.rawConfig.popperConfig, {
+      this.popper = new Ppr(this.instance.ariaElement, this.markup, merge(this.rawConfig.popperConfig, {
         modifiers: {
           arrow: {
             element: `[${ARIA_POPUP_ARROW}]`,
