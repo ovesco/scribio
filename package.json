@@ -1,4 +1,5 @@
 {
+  "name": "scribio",
   "main": "src/index.js",
   "license": "MIT",
   "description": "An in-place editing library",
