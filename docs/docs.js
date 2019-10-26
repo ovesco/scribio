@@ -75,8 +75,8 @@ Scribio.span(document.getElementById('options'), {
     },
   },
   buttons: {
-    submitText: 'Ayyyy',
-    cancelText: 'Lmfao',
+    submitText: 'Wow',
+    cancelText: 'No wow',
   },
   currentValue: 1,
   handler: {
