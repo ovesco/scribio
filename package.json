@@ -23,17 +23,18 @@
     "webpack-cli": "^3.3.9",
     "webpack-dev-middleware": "^3.7.2",
     "webpack-dev-server": "^3.8.2",
-    "webpack-hot-middleware": "^2.25.0"
+    "webpack-hot-middleware": "^2.25.0",
+    "gh-pages": "^2.1.1"
   },
   "scripts": {
     "build": "webpack --config build.config.js",
     "start": "webpack-dev-server --config dev.config.js",
-    "build-docs": "webpack --config dev.config.js"
+    "build-docs": "webpack --config dev.config.js",
+    "publish": "node publish-docs.js"
   },
   "dependencies": {
     "deepmerge": "^4.2.0",
     "flat": "^4.1.0",
-    "gh-pages": "^2.1.1",
     "popper.js": "^1.16.0"
   }
 }
