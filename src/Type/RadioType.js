@@ -12,7 +12,6 @@ const defaultConfig = {
   containerClass: '',
   labelClass: '',
   radioClass: '',
-  displaySeparator: '',
 };
 
 export default class extends BaseChoiceType {
@@ -34,7 +33,7 @@ export default class extends BaseChoiceType {
   }
 
   getReadableValue(value) {
-    return super.getReadableValue([value]);
+    return this.source.find((it) => `${it.value}` === `${value}`).text;
   }
 
   getTemplate() {

@@ -17,30 +17,30 @@ class Scribio {
     this.themes = [defaultTheme];
   }
 
-  registerRenderer(name, renderer) {
-    this.renderers.set(name, renderer);
+  registerRenderer(name, Renderer, loadedConfig = {}) {
+    this.renderers.set(name, { Renderer, loadedConfig });
   }
 
   loadTheme(theme) {
     this.themes.push(theme);
   }
 
-  registerType(name, type) {
-    this.types.set(name, type);
+  registerType(name, Type, loadedConfig = {}) {
+    this.types.set(name, { Type, loadedConfig });
   }
 
   getType({ name, config }) {
     if (!this.types.has(name)) throw new Error(`Unknown type ${name}`);
-    const Type = this.types.get(name);
+    const { Type, loadedConfig } = this.types.get(name);
     const themeConfig = themeResolver(this.themes, (t) => t.types, name);
-    return (instance) => new Type(instance, merge(themeConfig, config));
+    return (instance) => new Type(instance, merge.all([loadedConfig, themeConfig, config]));
   }
 
   getRenderer({ name, config }) {
     if (!this.renderers.has(name)) throw new Error(`Unknown renderer ${name}`);
     const themeConfig = themeResolver(this.themes, (t) => t.renderers, name);
-    const Renderer = this.renderers.get(name);
-    return (instance) => new Renderer(instance, merge(themeConfig, config));
+    const { Renderer, loadedConfig } = this.renderers.get(name);
+    return (instance) => new Renderer(instance, merge.all([loadedConfig, themeConfig, config]));
   }
 
   span(container, givenConfig = {}) {

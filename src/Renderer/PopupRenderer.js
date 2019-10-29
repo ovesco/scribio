@@ -60,7 +60,7 @@ export default class {
         if (this.popper === null || this.markup === null) return;
         if (this.markup.contains(e.target)) return;
         if (this.instance.ariaElement.contains(e.target)) return;
-        this.instance.close();
+        this.instance.session.cancel();
       };
 
       // Show popup

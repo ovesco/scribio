@@ -43,7 +43,7 @@ export default class {
     if (this.session !== null) return this.session;
     this.setLoading(true);
     this.session = new Session(this);
-    this.config('handler.onOpen')(() => {
+    Promise.resolve(this.config('handler.onOpen')).then(() => {
       this.session.open().then(() => {
         this.setLoading(false);
       });
@@ -57,7 +57,7 @@ export default class {
 
   close() {
     if (this.session === null) return;
-    this.config('handler.onClose')(() => {
+    Promise.resolve(this.config('handler.onClose')).then(() => {
       Promise.resolve(this.session.destroySession()).then(() => {
         this.session = null;
       });

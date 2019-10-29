@@ -26,9 +26,7 @@ export default class {
               const cancelBtn = buttonsMarkup.querySelector(`[${ARIA_CANCEL_BTN}]`);
               submitBtn.addEventListener('click', () => this.submit());
               cancelBtn.addEventListener('click', () => {
-                this.config('handler.onCancel')(() => {
-                  this.instance.close();
-                });
+                this.cancel();
               });
               submitBtn.innerHTML = this.config('buttons.submitText');
               cancelBtn.innerHTML = this.config('buttons.cancelText');
@@ -47,6 +45,14 @@ export default class {
           });
         });
       });
+    });
+  }
+
+  cancel() {
+    this.setLoading(true);
+    Promise.resolve(this.config('handler.onCancel')).then(() => {
+      this.setLoading(false);
+      this.instance.close();
     });
   }
 

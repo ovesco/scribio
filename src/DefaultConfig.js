@@ -27,6 +27,9 @@ export default {
   server: {
     url: null,
     requestParams: {},
+    resultFormatter(res, value) {
+      return res.data;
+    },
   },
   trigger: 'click', // 'hover', 'none'
   emptyValue: null,
@@ -42,16 +45,14 @@ export default {
     });
   },
   handler: {
-    onOpen(forward) {
-      forward();
+    onOpen() {
     },
-    onClose(forward) {
-      forward();
+    onClose() {
     },
     onSubmit(value, onSuccess, onError) {
       fetch(this.config('server.url'), { ...this.config('server.requestParams'), value })
         .then((res) => res.json())
-        .then(() => onSuccess(value))
+        .then((res2) => onSuccess(this.config('server.resultFormatter')(res2, value)))
         .catch((error) => onError(error));
     },
     onError(error, forward) {
