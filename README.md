@@ -392,9 +392,9 @@ Scribio.span(document.getElementById('scribio'), {
     name() {
       return this.target.getAttribute('data-type');
     },
-    initialValue() {
-      return this.target.getAttribute('data-value');
-    },
+  },
+  initialValue() {
+    return this.target.getAttribute('data-value');
   },
 });
 </script>
