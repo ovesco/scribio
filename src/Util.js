@@ -1,5 +1,6 @@
 import flat from 'flat';
 import merge from 'deepmerge';
+import DOMPurify from 'dompurify';
 
 export const resolveConfig = (config, item) => {
   const flatten = flat.flatten(config, { safe: true });
@@ -33,7 +34,7 @@ export const parseTemplate = (template) => {
   if (template instanceof Element || template instanceof Node) return template;
   let item = template;
   if (typeof template === 'function') item = template();
-  return (new DOMParser()).parseFromString(item, 'text/html').body.firstElementChild;
+  return (new DOMParser()).parseFromString(DOMPurify.sanitize(item), 'text/html').body.firstElementChild;
 };
 
 export const parseTemplateAsync = (template) => Promise.resolve(template)

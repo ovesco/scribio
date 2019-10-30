@@ -5,7 +5,8 @@ but doesn't rely on jquery, offers a lot of customization options and can be ext
 > DISCLAIMER: This project is still under active development, use it at your own risks
 
 ## What's cool about it
-- Three dependencies (deepmerge and flat for customization options, Popper.js for the included Popup renderer)
+- Uses DOMPurify to clean templates and markup before appending it to the DOM
+- Popup renderer makes use of Popper.JS for perfect positioning
 - Can be extended, you can create custom types (user input) and renderers (where the types are rendered). Scribio ships with a few types and a popup renderer by default
 - Highly customizable using configuration options
 - Possibility to develop and load themes which are based on configuration options (currently a Bootstrap 4 theme is available)
