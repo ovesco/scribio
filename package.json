@@ -8,12 +8,15 @@
     "@babel/preset-env": "^7.6.3",
     "babel-loader": "^8.0.6",
     "babel-minify-webpack-plugin": "^0.3.1",
+    "chai": "^4.2.0",
     "core-js": "^3.3.2",
     "css-loader": "^3.2.0",
     "eslint": "^6.5.1",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",
+    "gh-pages": "^2.1.1",
     "html-webpack-plugin": "^3.2.0",
+    "mocha": "^6.2.2",
     "node-sass": "^4.13.0",
     "parallel-webpack": "^2.4.0",
     "sass-loader": "^8.0.0",
@@ -23,14 +26,14 @@
     "webpack-cli": "^3.3.9",
     "webpack-dev-middleware": "^3.7.2",
     "webpack-dev-server": "^3.8.2",
-    "webpack-hot-middleware": "^2.25.0",
-    "gh-pages": "^2.1.1"
+    "webpack-hot-middleware": "^2.25.0"
   },
   "scripts": {
     "build": "webpack --config build.config.js",
     "start": "webpack-dev-server --config dev.config.js",
     "build-docs": "webpack --config dev.config.js",
-    "publish": "node publish-docs.js"
+    "publish": "node publish-docs.js",
+    "test": "mocha"
   },
   "dependencies": {
     "deepmerge": "^4.2.0",
