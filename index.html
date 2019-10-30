@@ -10,38 +10,45 @@
 
 <body>
     <div>
-        <div class="main-header">
-            <div class="d-flex flex-column justify-content-center align-items-center header-content">
-                <div id="scribio" class="text-white mt-1 mb-4"></div>
-                <h3 class="text-white-50 mb-3">A Javascript library for in-place editing</h3>
-                <a class="btn btn-light" href="https://github.com/ovesco/scribio" target="_blank">github</a>
-            </div>
-        </div>
-        <div class="container specs">
-            <div class="row">
-                <div class="col-12 col-md-3 mb-3 mb-md-0">
-                    <h3 id="types"></h3>
-                    <p class="card-text">
-                        Multiple types are already integrated, including Text, Select, Checkboxes and Radio buttons
-                    </p>
-                </div>
-                <div class="col-12 col-md-3 mb-3 mb-md-0">
-                    <h3 id="extendable"></h3>
-                    <p class="card-text">
-                        Add new types or renderers (currently only popup is available) easily using vanilla javascript
-                    </p>
-                </div>
-                <div class="col-12 col-md-3 mb-3 mb-md-0">
-                    <h3 id="options"></h3>
-                    <p class="card-text">
-                        Scribio supports a lot of configuration options which allows you to tune any part of it
-                    </p>
-                </div>
-                <div class="col-12 col-md-3 mb-3 mb-md-0">
-                    <h3 id="async"></h3>
-                    <p class="card-text">
-                        It supports async loading on template rendering, types and renderers initialization and more
-                    </p>
+        <div class="main-header"></div>
+        <div class="container-fluid main-container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-sm-10 col-md-8 col-lg-8">
+                    <div class="d-flex flex-column align-items-center justify-content-center header-content">
+                        <div id="scribio" class="text-white mt-lg-5 mb-4"></div>
+                        <h3 class="text-white-50 mb-3 text-center">A Javascript library for in-place editing</h3>
+                        <a class="btn btn-light" href="https://github.com/ovesco/scribio" target="_blank">github</a>
+                    </div>
+                    <div class="specs p-lg-4 p-3 mt-5">
+                        <div class="row">
+                            <div class="col-12 col-md-3 mb-md-0">
+                                <h5 id="types"></h5>
+                                <p class="text-muted">
+                                    Four different types are already integrated which are Text, Select, Checkboxes and Radio types
+                                </p>
+                            </div>
+                            <div class="col-12 col-md-3 mb-md-0">
+                                <h5 id="extendable"></h5>
+                                <p class="text-muted">
+                                    Adding new types and renderers is as easy as creating a class and implementing some methods
+                                </p>
+                            </div>
+                            <div class="col-12 col-md-3 mb-md-0">
+                                <h5 id="options"></h5>
+                                <p class="text-muted">
+                                    Scribio supports a lot of configuration options which allows you to tune it and hook into multiple parts of it
+                                </p>
+                            </div>
+                            <div class="col-12 col-md-3 mb-md-0">
+                                <h5 id="async"></h5>
+                                <p class="text-muted m-0">
+                                    It supports async loading on various template rendering, types and renderers initialization and more
+                                </p>
+                            </div>
+                        </div>
+                        <hr />
+                        <p class="text-muted m-0">Released under the MIT license</p>
+                    </div>
                 </div>
             </div>
         </div>
