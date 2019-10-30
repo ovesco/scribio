@@ -13,6 +13,5 @@ exec('npm run build-docs', (err) => {
       if (err) console.error(err);
       else console.log('Done publishing docs website!');
     });
-    console.log('Done!');
   }
 });

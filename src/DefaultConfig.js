@@ -46,7 +46,6 @@ export default {
   },
   handler: {
     onOpen() {
-      console.log('SWAG');
     },
     onClose() {
     },

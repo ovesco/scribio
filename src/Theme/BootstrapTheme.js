@@ -62,9 +62,11 @@ export default (size = 'md') => ({
         onShow() {
           const oldPlacement = this.popper.popper.getAttribute('x-placement');
           this.popper.scheduleUpdate();
-          const placement = this.popper.popper.getAttribute('x-placement');
-          this.popper.popper.classList.remove(`bs-popover-${oldPlacement}`);
-          this.popper.popper.classList.add(`bs-popover-${placement}`);
+          setTimeout(() => {
+            const placement = this.popper.popper.getAttribute('x-placement');
+            this.popper.popper.classList.remove(`bs-popover-${oldPlacement}`);
+            this.popper.popper.classList.add(`bs-popover-${placement}`);
+          }, 10); // Hack to have correct placement
         },
       },
     },
