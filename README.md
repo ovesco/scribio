@@ -243,15 +243,6 @@ Once a session is created, it will automatically create a new instance of the ty
 they can store in themselves inner properties and attributes, types and renderer lives as long as the edit session
 is opened.
 
-### Reading configuration
-If you need to read the instance, type or renderer's configuration once you have access to it, you can
-do it by the following: 
-````js
-instance.config('config.key')
-````
-The whole configuration object tree is first flattened (separated by a `.`) before having all function
-options binded to the correct context as explained in the configuration section.
-
 ## Creating your own type
 You can add new types to Scribio very easily. It all comes down to creating a new class and registering it.
 
@@ -348,6 +339,61 @@ Where:
 - myRenderer is your renderer name, it will be used when spanning new instances
 - rendererClass is the class of your renderer
 - someConfig, you can eventually pass some config here. This is used if you register a third-party renderer and want to override default configuration on registration.
+
+## Creating theme
+Scribio supports global modifiers by the mean of themes. A theme is, in the end, simply a big configuration object. You can
+override configuration for everything in a theme. It still differs a little bit from the standard default configuration. Here is a basic theme:
+````js
+export default {
+  types: [
+    {
+      name: 'text',
+      config: { /* text type config */},
+    },
+  ],
+  renderers: [
+    {
+      name: 'popup',
+      config: { /* popup renderer config */},
+    },
+  ],
+  config: {
+    /* Global config */
+  }, 
+}
+````
+
+As you can see, a theme can override configuration per type and renderer, as well as override any global configuration
+option. You don't have to override everything, only the parts you want. The configuration tree is then progressively merged
+as detailed in the next section.
+
+## How configuration is handled
+Scribio is based on a lot of configuration options. Here is the order in which it is merged:
+- *Default configuration*, first we take the base configuration object given to have all properties defined
+- *Loaded configuration*, only for types and renderers, we first merge it with the configuration given on registration
+- *Theme configuration*, we iterate over each theme by order of registration and merge it
+- *Spanning configuration*, we finish by merging it with the configuration given on a `Scribio.span(node, config)`
+
+### Configuration flattening
+For Scribio core types and renderers as well as instance configuration, the whole tree is flattened to a one level object.
+Objets like `{ handler: { onSubmit: fn } }` become `{ 'handler.onSubmit': fn }`.
+
+### Configuration functions
+Each configuration option has a type (number, string, function as detailed in the upper section), but can also be a function returning a value
+of the given type (except for functions as explained in the section below). As such, for each detected function, we bind
+the `this` to an object, for the instance configuration it is the instance itself, for a renderer it is the renderer itself
+and the same goes for the type.
+
+### Reading configuration
+If you need to read the instance, type or renderer's configuration once you have access to it, you can
+do it by the following: 
+````js
+instance.config('config.key')
+````
+If the config value you expect is a function you wish to call, you rather have to retrieve it like this:
+````js
+instance.config.fn('config.key')
+````
 
 ## License
 This code is licensed under the MIT license
