@@ -26,6 +26,7 @@ const defaultConfig = {
   },
   popper: window.Popper,
   transitionDuration: 300,
+  title: null,
   closeOnClickOutside: true,
   onShow() {
   },
@@ -90,6 +91,10 @@ export default class {
 
   show(markup) {
     const container = this.markup.querySelector(`[${ARIA_POPUP_CONTAINER}]`);
+    if (this.config('title')) {
+      // Display title
+      this.markup.querySelector(`[${ARIA_POPUP_TITLE}]`).innerHTML = this.config('title');
+    }
     this.markup.style.opacity = '1';
     emptyContent(container);
     container.appendChild(markup);

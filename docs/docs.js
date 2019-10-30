@@ -23,6 +23,7 @@ Scribio.loadTheme(PopperTheme);
 Scribio.loadTheme(BootstrapTheme('sm'));
 const headerInstance = Scribio.span(document.getElementById('scribio'), {
   currentValue: 'Scribio',
+  renderer: { config: { title: 'Edit title' } },
   handler: {
     onSubmit,
   },

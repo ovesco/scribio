@@ -31,9 +31,7 @@ export default {
       return res.data;
     },
   },
-  trigger() {
-    return 'click';
-  }, // 'hover', 'none'
+  trigger: 'click', // 'hover', 'none'
   emptyValue: null,
   currentValue: null,
   voidDisplay: 'Empty',

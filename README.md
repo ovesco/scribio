@@ -197,6 +197,7 @@ It comes with the following default configuration:
 |transitionDuration|number|`300`|Transition duration in milliseconds|no|
 |closeOnClickOutside|bool|`true`|If clicking outside the popup cancel and close the edition session|no|
 |popupTemplate|string|Check the source|The popup's template, note the aria elements which are required if you override this option|no|
+|title|string|`null`|Popup title|no|
 
 ##Customizing Scribio
 Scribio can be easily customized by the means of adding new types, renderers and themes which will be explained here.

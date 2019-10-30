@@ -52,7 +52,7 @@ export default (size = 'md') => ({
           return `
 <div class="popover fade show bs-popover-${this.config('popperConfig.placement')}">
     <div class="arrow" ${ARIA_POPUP_ARROW}></div>
-    <h3 class="popover-header ${ARIA_POPUP_TITLE}"></h3>
+    <h3 class="popover-header" ${ARIA_POPUP_TITLE}></h3>
     <div class="popover-body">
         <div ${ARIA_POPUP_CONTAINER}></div>
         <div class="invalid-feedback d-block" ${ARIA_POPUP_ERROR}></div>
