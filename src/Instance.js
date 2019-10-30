@@ -10,7 +10,7 @@ export default class {
     this.ariaElement = this.buildContainer();
     this.createType = () => type(this);
     this.createRenderer = () => renderer(this);
-    this.value = this.config('currentValue');
+    this.value = this.config('initialValue');
     this.loading = false;
     this.session = null;
     this.refreshContent();

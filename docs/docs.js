@@ -22,7 +22,7 @@ const onSubmit = (value, onSuccess) => {
 Scribio.loadTheme(PopperTheme);
 Scribio.loadTheme(BootstrapTheme('sm'));
 const headerInstance = Scribio.span(document.getElementById('scribio'), {
-  currentValue: 'Scribio',
+  initialValue: 'Scribio',
   renderer: { config: { title: 'Edit title' } },
   handler: {
     onSubmit,
@@ -41,7 +41,7 @@ Scribio.span(document.getElementById('types'), {
       dataSource: [{ value: 1, text: 'Integrated' }, { value: 2, text: 'types' }, { value: 3, text: 'Triggers an error' }],
     },
   },
-  currentValue: [1, 2],
+  initialValue: [1, 2],
   handler: {
     onSubmit,
     validate(value) {
@@ -57,7 +57,7 @@ Scribio.span(document.getElementById('extendable'), {
       type: 'textarea',
     },
   },
-  currentValue: 'Easily extendable',
+  initialValue: 'Easily extendable',
   handler: {
     onSubmit,
   },
@@ -79,7 +79,7 @@ Scribio.span(document.getElementById('options'), {
     submitText: 'Wow',
     cancelText: 'No wow',
   },
-  currentValue: 1,
+  initialValue: 1,
   handler: {
     onSubmit(value, onSuccess) {
       alert(`You chose [${this.session.type.getReadableValue(value)}], which is a cool choice`);
@@ -98,7 +98,7 @@ Scribio.span(document.getElementById('async'), {
       dataSource: [{ value: 1, text: 'Async support' }, { value: 2, text: 'Awesome features' }],
     },
   },
-  currentValue: 1,
+  initialValue: 1,
   handler: {
     onOpen() {
       return new Promise((resolve) => {

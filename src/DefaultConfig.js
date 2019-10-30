@@ -33,7 +33,7 @@ export default {
   },
   trigger: 'click', // 'hover', 'none'
   emptyValue: null,
-  currentValue: null,
+  initialValue: null,
   voidDisplay: 'Empty',
   valueDisplay(value) {
     if (this.session !== null) return this.session.type.getReadableValue(value);

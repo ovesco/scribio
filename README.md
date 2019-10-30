@@ -82,7 +82,7 @@ You can check all defaults in the default config file.
 |trigger|string|Scribio trigger, can be either `'click', 'hover' or 'none'`|no|
 |emptyValue|any|The **empty value**, which indicates to Scribio that the current instance has no value|no|
 |voidDisplay|string|The text displayed if the current value is equal to the config option `emptyValue`|no|
-|currentValue|any|This instance's initialization value|no|
+|initialValue|any|This instance's initialization value|no|
 |valueDisplay|function|What should be displayed for a given value, by default will use the Type to display it|no|
 
 ### Type and renderer
@@ -383,7 +383,23 @@ Objets like `{ handler: { onSubmit: fn } }` become `{ 'handler.onSubmit': fn }`.
 Each configuration option has a type (number, string, function as detailed in the upper section), but can also be a function returning a value
 of the given type (except for functions as explained in the section below). As such, for each detected function, we bind
 the `this` to an object, for the instance configuration it is the instance itself, for a renderer it is the renderer itself
-and the same goes for the type.
+and the same goes for the type. For example you can do something like this if the type is stored in an attribute:
+````html
+<div id="scribio" data-type="text" data-value="Initial value"></div>
+<script type="text/javascript">
+Scribio.span(document.getElementById('scribio'), {
+  type: {
+    name() {
+      return this.target.getAttribute('data-type');
+    },
+    initialValue() {
+      return this.target.getAttribute('data-value');
+    },
+  },
+});
+</script>
+````
+Please be aware that arrow function won't work because of the `this` context which cannot be bound dynamically.
 
 ### Reading configuration
 If you need to read the instance, type or renderer's configuration once you have access to it, you can
