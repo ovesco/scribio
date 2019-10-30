@@ -31,7 +31,9 @@ export default {
       return res.data;
     },
   },
-  trigger: 'click', // 'hover', 'none'
+  trigger() {
+    return 'click';
+  }, // 'hover', 'none'
   emptyValue: null,
   currentValue: null,
   voidDisplay: 'Empty',
@@ -46,6 +48,7 @@ export default {
   },
   handler: {
     onOpen() {
+      console.log('SWAG');
     },
     onClose() {
     },
@@ -55,13 +58,12 @@ export default {
         .then((res2) => onSuccess(this.config('server.resultFormatter')(res2, value)))
         .catch((error) => onError(error));
     },
-    onError(error, forward) {
-      forward(error);
+    onError() {
     },
-    onCancel(forward) {
-      forward();
+    onCancel() {
     },
-    onLoading: () => null,
+    onLoading: () => {
+    },
     errorDisplay(error) {
       return error.message;
     },

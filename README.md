@@ -2,6 +2,8 @@
 Scribio is a Javascript library to perform inline editing on a webpage. It is inspired by [x-editable](https://vitalets.github.io/x-editable/),
 but doesn't rely on jquery, offers a lot of customization options and can be extended by the mean of types and renderers.
 
+> DISCLAIMER: This project is still under active development, use it at your own risks
+
 ## What's cool about it
 - Three dependencies (deepmerge and flat for customization options, Popper.js for the included Popup renderer)
 - Can be extended, you can create custom types (user input) and renderers (where the types are rendered). Scribio ships with a few types and a popup renderer by default
@@ -190,7 +192,7 @@ It comes with the following default configuration:
 
 |key|type|default|description|async|
 |---|---|---|---|---|
-|popperConfig|object|`{ placement: 'top', positionFixed: true }`|Configuration passed down to Popper on initialization|no|
+|popperConfig|object|`{ placement: 'top' }`|Configuration passed down to Popper on initialization|no|
 |popper|object|`window.Popper`|Popper instance|no|
 |transitionDuration|number|`300`|Transition duration in milliseconds|no|
 |closeOnClickOutside|bool|`true`|If clicking outside the popup cancel and close the edition session|no|
@@ -346,3 +348,6 @@ Where:
 - myRenderer is your renderer name, it will be used when spanning new instances
 - rendererClass is the class of your renderer
 - someConfig, you can eventually pass some config here. This is used if you register a third-party renderer and want to override default configuration on registration.
+
+## License
+This code is licensed under the MIT license

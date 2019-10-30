@@ -57,7 +57,7 @@ export default class {
 
   close() {
     if (this.session === null) return;
-    Promise.resolve(this.config('handler.onClose')).then(() => {
+    Promise.resolve(this.config.fn('handler.onClose')).then(() => {
       Promise.resolve(this.session.destroySession()).then(() => {
         this.session = null;
       });
@@ -68,7 +68,7 @@ export default class {
     const { value, ariaElement } = this;
     if (this.config('emptyValue') !== value) {
       this.setLoading(true);
-      Promise.resolve(this.config('valueDisplay')(value)).then((markup) => {
+      Promise.resolve(this.config.fn('valueDisplay')(value)).then((markup) => {
         ariaElement.innerHTML = markup;
         this.setLoading(false);
       });

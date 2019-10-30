@@ -23,11 +23,12 @@ export {
 const defaultConfig = {
   popperConfig: {
     placement: 'top',
-    positionFixed: true,
   },
   popper: window.Popper,
   transitionDuration: 300,
   closeOnClickOutside: true,
+  onShow() {
+  },
   popupTemplate: `
 <div class="scribio-popup">
     <div class="scribio-popup-arrow" ${ARIA_POPUP_ARROW}></div>
@@ -92,7 +93,9 @@ export default class {
     this.markup.style.opacity = '1';
     emptyContent(container);
     container.appendChild(markup);
-    this.popper.scheduleUpdate();
+    Promise.resolve(this.config.fn('onShow')()).then(() => {
+      this.popper.scheduleUpdate();
+    });
   }
 
   loading(status) {

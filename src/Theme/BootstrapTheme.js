@@ -59,17 +59,23 @@ export default (size = 'md') => ({
     </div>
 </div>`;
         },
+        onShow() {
+          const oldPlacement = this.popper.popper.getAttribute('x-placement');
+          this.popper.scheduleUpdate();
+          const placement = this.popper.popper.getAttribute('x-placement');
+          this.popper.popper.classList.remove(`bs-popover-${oldPlacement}`);
+          this.popper.popper.classList.add(`bs-popover-${placement}`);
+        },
       },
     },
   ],
   config: {
     handler: {
-      onError(error, forward) {
+      onError() {
         const { markup } = this.session;
         [...markup.querySelectorAll('input'), ...markup.querySelectorAll('textarea')].forEach((input) => {
           input.classList.add('is-invalid');
         });
-        forward(error);
       },
       onLoading(status) {
         const { markup } = this.session;

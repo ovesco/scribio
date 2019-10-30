@@ -84,9 +84,8 @@ Scribio.span(document.getElementById('options'), {
       alert(`You chose [${this.session.type.getReadableValue(value)}], which is a cool choice`);
       onSuccess(value);
     },
-    onCancel(forward) {
+    onCancel() {
       alert('You cancelled it :\'(');
-      forward();
     },
   },
 });
@@ -95,13 +94,15 @@ Scribio.span(document.getElementById('async'), {
   type: {
     name: 'select',
     config: {
-      dataSource: [{ value: 1, text: 'Async by nature' }, { value: 2, text: 'Awesome features' }],
+      dataSource: [{ value: 1, text: 'Async support' }, { value: 2, text: 'Awesome features' }],
     },
   },
   currentValue: 1,
   handler: {
-    onOpen(cb) {
-      setTimeout(() => { cb(); }, 1000);
+    onOpen() {
+      return new Promise((resolve) => {
+        setTimeout(() => { resolve(); }, 1000);
+      });
     },
     onSubmit(value, onSuccess) {
       setTimeout(() => {

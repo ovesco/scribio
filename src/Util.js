@@ -8,10 +8,19 @@ export const resolveConfig = (config, item) => {
     const val = flatten[key];
     mapConfig.set(key, (typeof val === 'function') ? () => val.bind(item) : () => val);
   });
-  return (key) => {
+
+  const resolveFn = (key) => {
+    if (!mapConfig.has(key)) throw new Error(`Unknown config key ${key}`);
+    const value = mapConfig.get(key)();
+    return (typeof value === 'function') ? value() : value;
+  };
+
+  resolveFn.fn = (key) => {
     if (!mapConfig.has(key)) throw new Error(`Unknown config key ${key}`);
     return mapConfig.get(key)();
   };
+
+  return resolveFn;
 };
 
 export const themeResolver = (themes, ld, name) => themes.flatMap(ld)

@@ -57,7 +57,7 @@ export default class {
   }
 
   setLoading(status) {
-    this.config('handler.onLoading')(status);
+    this.config.fn('handler.onLoading')(status);
     this.renderer.loading(status);
     this.type.disable(status);
     if (this.config('buttons.enabled')) {
@@ -67,8 +67,9 @@ export default class {
   }
 
   error(error) {
-    this.config('handler.onError')(error, (e) => {
-      this.renderer.error(this.config('handler.errorDisplay')(e));
+    Promise.resolve(this.config.fn('handler.onError')(error)).then((e) => {
+      const err = e || error;
+      this.renderer.error(this.config.fn('handler.errorDisplay')(err));
     });
   }
 
@@ -76,11 +77,11 @@ export default class {
     this.setLoading(true);
     const value = this.type.getInputValue();
     if (value === this.instance.value) this.instance.close();
-    else if (this.config('handler.validate')(value) !== true) {
+    else if (this.config.fn('handler.validate')(value) !== true) {
       this.error(new Error('Invalid value provided'));
       this.setLoading(false);
     } else {
-      this.config('handler.onSubmit')(value, (newValue) => {
+      this.config.fn('handler.onSubmit')(value, (newValue) => {
         this.instance.setNewValue(newValue);
         this.instance.close();
       }, (error) => {
