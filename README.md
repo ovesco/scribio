@@ -2,6 +2,8 @@
 Scribio is a Javascript library to perform inline editing on a webpage. It is inspired by [x-editable](https://vitalets.github.io/x-editable/),
 but doesn't rely on jquery, offers a lot of customization options and can be extended by the mean of types and renderers.
 
+## This project was mainly an experiment, check [Flyter](https://github.com/ovesco/flyter) for a library to perform inline editing.
+
 > DISCLAIMER: This project is still under active development, use it at your own risks
 
 ## What's cool about it
